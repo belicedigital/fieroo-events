@@ -1,0 +1,24 @@
+{
+    "name": "fieroo/events",
+    "description": "Fieroo Events",
+    "type": "library",
+    "license": "EULA",
+    "autoload": {
+        "psr-4": {
+            "Fieroo\\Events\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Francesco Passanante",
+            "email": "francescopassanante@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Fieroo\\Events\\Providers\\EventsProvider"
+            ]
+        }
+    }
+}
