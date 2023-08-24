@@ -203,53 +203,6 @@
             toastr.error("{{trans('messages.first_step_error')}}")
         }
     })
-    /*
-    stepperEl.addEventListener('shown.bs-stepper', function (event) {
-        if(event.detail.indexStep === 1) {
-            event.preventDefault()
-            loadFurnishings()
-        }
-    })
-    const loadFurnishings = () => {
-        let n_modules = parseInt($('select[name="n_modules"]').val())
-        let base_url = '/admin/stands/getFurnishingsList'
-        common_request.post(base_url, {
-            stand_type_id: $('select[name="stand_type"]').val()
-        })
-        .then(response => {
-            let data = response.data
-            if(data.status) {
-                $.each(data.data, function(index, element) {
-                    console.log(element)
-                    //let tr = document.createElement('tr')
-                    let is_supplied = element.is_supplied ? "{{trans('generals.yes')}}" : "{{trans('generals.no')}}"
-                    let row = `<tr data-id="${element.id}">
-                                <td>${element.description}</td>
-                                <td name="is_supplied">${is_supplied}</td>
-                                <td name="price"><span>${element.price}</span> &euro;</td>
-                                <td name="size">${element.size}</td>
-                                <td>
-                                </td>
-                                <td></td>
-                                <td name="qty_max_supplied">
-                                </td>
-                                <td></td>
-                                <td>
-                                </td>
-                            </tr>`
-                    $('table').find('tbody').append(row)
-                })
-                // inject data from server to datatable into id="furnishings-area"
-            } else {
-                toastr.error(data.message)
-            }
-        })
-        .catch(error => {
-            toastr.error(error)
-            console.log(error)
-        })
-    }
-    */
     const assignCalcs = () => {
         let tot = $('#price').find('span').text() * $('select[name="n_modules"]').val()
         tot = parseFloat(tot).toFixed(2)
@@ -270,48 +223,13 @@
             $('input[name="modules_selected"]').val(selected_module[0].value)
             if(selected_module[0].value.length > 0) {
                 assignCalcs()
-                /*
-                let tot = $('#price').find('span').text() * $('select[name="n_modules"]').val()
-                tot = parseFloat(tot).toFixed(2)
-                $('#total').find('span').text(tot)
-                */
             }
         })
         $('select[name="n_modules"]').on('change', function(e) {
             $('#total').find('span').text('')
             assignCalcs()
-            /*
-            let tot = $('#price').find('span').text() * $(this).val()
-            tot = parseFloat(tot).toFixed(2)
-            $('#total').find('span').text(tot)
-            */
             $('input[name="modules_selected"]').val($('select[name="n_modules"]').val())
         })
-
-        /*
-        $('table').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": true,
-            "ordering": true,
-            "info": false,
-            "autoWidth": false,
-            "responsive": false,
-            columnDefs: [{
-                orderable: false,
-                targets: "no-sort"
-            }],
-            "oLanguage": {
-                "sSearch": "{{trans('generals.search')}}",
-                "oPaginate": {
-                    "sFirst": "{{trans('generals.start')}}", // This is the link to the first page
-                    "sPrevious": "«", // This is the link to the previous page
-                    "sNext": "»", // This is the link to the next page
-                    "sLast": "{{trans('generals.end')}}" // This is the link to the last page
-                }
-            }
-        });
-        */
     });
 </script>
 @endsection
