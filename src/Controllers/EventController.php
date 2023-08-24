@@ -56,6 +56,9 @@ class EventController extends Controller
     {
         $validation_data = [
             'title' => ['required', 'string', 'max:255'],
+            'start' => ['required', 'date_format:Y-m-d', 'before_or_equal:end'],
+            'end' => ['required', 'date_format:Y-m-d', 'after_or_equal:start'],
+            'subscription_date_open_until' => ['required', 'date_format:Y-m-d', 'before_or_equal:start'],
         ];
 
         $validator = Validator::make($request->all(), $validation_data);
@@ -128,6 +131,9 @@ class EventController extends Controller
     {
         $validation_data = [
             'title' => ['required', 'string', 'max:255'],
+            'start' => ['required', 'date_format:Y-m-d', 'before_or_equal:end'],
+            'end' => ['required', 'date_format:Y-m-d', 'after_or_equal:start'],
+            'subscription_date_open_until' => ['required', 'date_format:Y-m-d', 'before_or_equal:start'],
         ];
 
         $validator = Validator::make($request->all(), $validation_data);

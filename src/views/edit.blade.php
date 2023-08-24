@@ -60,27 +60,3 @@
     </div>
 </div>
 @endsection
-@section('scripts')
-<script>
-    $(document).ready(function() {
-        let start = $('input[name="start"]')
-        let end = $('input[name="end"]')
-        let subscription_date_open_until = $('input[name="subscription_date_open_until"]')
-        start.change(function() {
-            if(start.val() > end.val()) {
-                toastr.error('La data di fine evento deve essere maggiore della data di inizio evento')
-            }
-        })
-        end.change(function() {
-            if(end.val() < start.val()) {
-                toastr.error('La data di fine evento deve essere maggiore della data di inizio evento')
-            }
-        })
-        subscription_date_open_until.change(function() {
-            if(subscription_date_open_until.val() > start.val() || subscription_date_open_until.val() > end.val()) {
-                toastr.error('La data di fine apertura iscrizioni deve essere minore della data inizio evento e della data fine evento')
-            }
-        })
-    });
-</script>
-@endsection
