@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\App;
 use Fieroo\Events\Models\Event;
 use Fieroo\Payment\Models\Payment;
+use Fieroo\Exhibitors\Models\Exhibitor;
 // use App\Models\Order;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
@@ -227,12 +228,13 @@ class EventController extends Controller
         return view('events::furnishings', ['event_id' => $event_id,'list' => $list, 'modules' => $modules, 'exhibitor_data' => $exhibitor_data, 'stand_type_id' => $stand_type_id, 'stand_name' => $stand_name]);
     }
 
-    public function recapFurnishings($event_id)
+    public function recapFurnishings($event_id, $exhibitor_id)
     {
         $orders = DB::table('orders')
             ->leftJoin('furnishings_translations','orders.furnishing_id','=','furnishings_translations.furnishing_id')
             ->where([
-                ['orders.exhibitor_id','=',auth()->user()->exhibitor->id],
+                // ['orders.exhibitor_id','=',auth()->user()->exhibitor->id],
+                ['orders.exhibitor_id','=',$exhibitor_id],
                 ['orders.event_id','=',$event_id],
                 ['furnishings_translations.locale','=',App::getLocale()]
             ])
@@ -240,9 +242,12 @@ class EventController extends Controller
             ->groupBy('orders.furnishing_id','furnishings_translations.description')
             ->get();
 
+        $exhibitor = Exhibitor::findOrFail($exhibitor_id);
+
         $payment_data = DB::table('payments')->where([
             ['event_id','=',$event_id],
-            ['user_id','=',auth()->user()->id],
+            // ['user_id','=',auth()->user()->id],
+            ['user_id','=',$exhibitor->user->id],
             ['type_of_payment','=','subscription']
         ])->first();
         if(!is_object($payment_data)) {
@@ -251,7 +256,8 @@ class EventController extends Controller
 
         $extra_furnishings_payment = DB::table('payments')->where([
             ['event_id','=',$event_id],
-            ['user_id','=',auth()->user()->id],
+            // ['user_id','=',auth()->user()->id],
+            ['user_id','=',$exhibitor->user->id],
             ['type_of_payment','=','furnishing']
         ])->first();
         $extra = 0;
