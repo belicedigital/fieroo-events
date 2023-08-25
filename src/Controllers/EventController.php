@@ -288,7 +288,7 @@ class EventController extends Controller
         //     })->get();
         $subscriptions = Payment::where([
             ['event_id', '=', $event_id],
-            ['type_of_payment', '=', 'subscription']
+            ['type_of_payment', '=', 'subscription'],
         ])->get();
         return view('events::subscriptions', ['list' => $subscriptions, 'event_title' => $event->title]);
     }

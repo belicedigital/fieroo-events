@@ -25,10 +25,10 @@
                             @foreach($list as $l)
                             <tr>
                                 <td>{{$l->user->exhibitor->detail->company}}</td>
-                                <td>{{$l->user->emal}}</td>
+                                <td>{{$l->user->email}}</td>
                                 <td>
                                     <div class="btn-group btn-group" role="group">
-                                        <a data-toggle="tooltip" data-placement="top" title="{{trans('generals.recap')}}" class="btn btn-primary" href="{{url('admin/events/'.$l->id.'/recap-furnishings')}}"><i class="far fa-list-alt"></i></a>
+                                        <a data-toggle="tooltip" data-placement="top" title="{{trans('generals.recap')}}" class="btn btn-default" href="{{url('admin/events/'.$l->event_id.'/recap-furnishings')}}"><i class="far fa-list-alt"></i></a>
                                     </div>
                                 </td>
                             </tr>
