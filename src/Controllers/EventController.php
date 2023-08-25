@@ -281,7 +281,8 @@ class EventController extends Controller
             'orders' => $orders,
             'n_modules' => $n_modules,
             'amount' => $amount,
-            'stand_name' => $stand_trans->name
+            'stand_name' => $stand_trans->name,
+            'back_url' => 'admin/events/'.$event_id.'/exhibitors'
         ]);
     }
 
