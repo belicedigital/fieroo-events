@@ -281,10 +281,14 @@ class EventController extends Controller
     public function indexExhibitors($event_id)
     {
         $event = Event::findOrFail($event_id);
-        $subscriptions = Event::where('id', '=', $event_id)
-            ->whereHas('subscriptions', function($q) {
-                $q->where('type_of_payment', 'subscription');
-            })->get();
+        // $subscriptions = Event::where('id', '=', $event_id)
+        //     ->whereHas('subscriptions', function($q) {
+        //         $q->where('type_of_payment', 'subscription');
+        //     })->get();
+        $subscriptions = Payment::where([
+            ['event_id', '=', $event_id],
+            ['type_of_payment', '=', 'subscription']
+        ])->get();
         return view('events::subscriptions', ['list' => $subscriptions, 'event_title' => $event->title]);
     }
 
