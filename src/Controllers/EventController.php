@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\App;
 use Fieroo\Events\Models\Event;
+use Fieroo\Payment\Models\Payment;
 // use App\Models\Order;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
