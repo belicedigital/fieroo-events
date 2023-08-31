@@ -6,7 +6,10 @@
     "autoload": {
         "psr-4": {
             "Fieroo\\Events\\": "src/"
-        }
+        },
+        "files": [
+            "src/helpers.php"
+        ]
     },
     "authors": [
         {
