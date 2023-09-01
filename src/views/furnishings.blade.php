@@ -165,7 +165,7 @@
                 row.find('td[name="is_supplied"]').text(extra_price)
                 row.find('td[name="price"] span').text(data.data.price)
                 row.find('td[name="size"]').text(data.data.size)
-                let path = "{{asset('upload/furnishings')}}" + '/' + data.data.file_path
+                let path = "{{asset('img/furnishings')}}" + '/' + data.data.file_path
                 row.find('td a > img').attr('src', path)
                 row.find('[data-total-partial]').text()
                 row.attr({
