@@ -29,7 +29,7 @@
                     <h3 class="card-title">{{$order->description}}</h3>
                 </div>
                 <div class="card-body p-3 d-flex align-items-center justify-content-center">
-                    <img style="width:250px;height:250px;object-fit:cover;" src="{{getFurnishingImg($order->furnishing_id)}}">
+                    <img style="width:100%;max-width:250px;height:250px;object-fit:cover;" src="{{getFurnishingImg($order->furnishing_id)}}">
                 </div>
                 <div class="card-footer">
                     <p class="m-0"><strong>{{trans('tables.qty')}}</strong> {{$order->qty}}</p>
