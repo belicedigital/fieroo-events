@@ -150,9 +150,9 @@ class EventController extends Controller
         try {
             $event = Event::findOrFail($id);
             $event->title = $request->title;
-            $event->start = Carbon::parse($request->start)->format('Y-m-d');
-            $event->end = Carbon::parse($request->end)->format('Y-m-d');
-            $event->subscription_date_open_until = Carbon::parse($request->subscription_date_open_until)->format('Y-m-d');
+            $event->start = Carbon::parse($request->start)->format('d/m/Y');
+            $event->end = Carbon::parse($request->end)->format('d/m/Y');
+            $event->subscription_date_open_until = Carbon::parse($request->subscription_date_open_until)->format('d/m/Y');
             $event->is_published = $request->is_published ? true : false;
             $event->save();
 
