@@ -20,13 +20,6 @@
                                 <span class="bs-stepper-label">{{trans('generals.exhibitor_solution')}}</span>
                             </button>
                         </div>
-                        {{--<div class="line"></div>
-                        <div class="step" data-target="#furnishings-part">
-                            <button type="button" class="step-trigger" role="tab" aria-controls="furnishings-part" id="furnishings-part-trigger">
-                                <span class="bs-stepper-circle">2</span>
-                                <span class="bs-stepper-label">Arredi</span>
-                            </button>
-                        </div>--}}
                         <div class="line"></div>
                         <div class="step" data-target="#checkout-part">
                             <button type="button" class="step-trigger" role="tab" aria-controls="checkout-part" id="checkout-part-trigger">
@@ -67,48 +60,31 @@
                                 </div>
                             </div>
                         </div>
-                        {{--<div id="furnishings-part" class="content" role="tabpanel" aria-labelledby="furnishings-part-trigger">
-                            <div class="row">
-                                <div class="col-xs-12 col-sm-12 col-md-12">
-                                    <div id="furnishings-area">
-                                        <table class="table table-hover text-nowrap">
-                                            <thead>
-                                                <tr>
-                                                    <th>{{trans('tables.description')}}</th>
-                                                    <th>{{trans('tables.is_supplied')}}</th>
-                                                    <th>{{trans('tables.price')}}</th>
-                                                    <th>{{trans('tables.size')}}</th>
-                                                    <th class="no-sort">{{trans('tables.color')}}</th>
-                                                    <th class="no-sort">{{trans('tables.min_supplied')}}</th>
-                                                    <th class="no-sort">{{trans('tables.max_supplied')}}</th>
-                                                    <th class="no-sort">{{trans('tables.image')}}</th>
-                                                    <th class="no-sort">{{trans('tables.actions')}}</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody></tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-12 col-sm-12 col-md-12">
-                                    <div class="form-group">
-                                        <button class="btn btn-primary" onclick="stepper.to(1)">«</button>
-                                        <button class="btn btn-primary" onclick="stepper.next()">»</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>--}}
                         <div id="checkout-part" class="content col-xs-12 col-sm-12 col-md-6 offset-md-3" role="tabpanel" aria-labelledby="checkout-part-trigger">
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12">
-                                    <form class="d-flex py-5 justify-content-center align-items-center" action="{{route('payment')}}" method="POST">
+                                    {{-- <form class="d-flex py-5 justify-content-center align-items-center" action="{{route('payment')}}" method="POST">
                                         @csrf
                                         <input type="hidden" name="stand_selected">
                                         <input type="hidden" name="modules_selected">
                                         <input type="hidden" name="event_id" value="{{$event->id}}">
                                         <input type="hidden" name="type_of_payment" value="subscription">
                                         <button type="submit" class="btn btn-lg btn-block btn-success"><i class="fab fa-paypal"></i> {{trans('generals.paypal_payment_btn')}}</button>
+                                    </form> --}}
+                                    <form id="stripePayment" class="d-flex flex-column py-5" action="{{route('stripe-payment')}}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="stand_selected">
+                                        <input type="hidden" name="modules_selected">
+                                        <input type="hidden" name="event_id" value="{{$event->id}}">
+                                        <input type="hidden" name="type_of_payment" value="subscription">
+                                        <input type="hidden" id="paymentMethodId" name="paymentMethodId">
+                                        <div class="form-group">
+                                            <input id="card-holder-name" type="text" class="form-control" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <div id="card-element" class="form-control"></div>
+                                        </div>
+                                        <button id="card-button" class="btn btn-lg btn-block btn-success"><i class="fab fa-cc-stripe"></i> {{trans('generals.stripe_payment_btn')}}</button>
                                     </form>
                                 </div>
                             </div>
@@ -134,7 +110,43 @@
 </div>
 @endsection
 @section('scripts')
+<script src="https://js.stripe.com/v3/"></script>
 <script>
+    const initStripe = () => {
+        const stripe = Stripe("{{env('STRIPE_KEY')}}");
+ 
+        const elements = stripe.elements();
+        const cardElement = elements.create('card');
+
+        cardElement.mount('#card-element');
+
+        const cardHolderName = document.getElementById('card-holder-name');
+        const cardButton = document.getElementById('card-button');
+
+        cardButton.addEventListener('click', async (e) => {
+            e.preventDefault()
+            const { paymentMethod, error } = await stripe.createPaymentMethod(
+                'card', cardElement, {
+                    billing_details: { name: cardHolderName.value }
+                }
+            );
+        
+            if (error) {
+                toastr.error(error.message)
+            } else {
+                Swal.fire({
+                    icon: 'success',
+                    title: "{{trans('generals.stripe_card_verified')}}",
+                    confirmButtonText: "{{trans('generals.stripe_confirm_payment')}}",
+                    allowOutsideClick: false,
+                }).then(() => {
+                    $('#paymentMethodId').val(paymentMethod.id)
+                    $('#stripePayment').trigger('submit')
+                })
+            }
+        });
+    }
+
     const getStands = () => {
         let base_url = '/admin/stands/getSelectList'
         common_request.post(base_url)
@@ -209,6 +221,7 @@
         $('#total').find('span').text(tot)
     }
     $(document).ready(function(){
+        initStripe();
         getStands();
         $('select[name="stand_type"]').on('change', function(e) {
             resetCalcs()
