@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\App;
 use Fieroo\Events\Models\Event;
 use Fieroo\Payment\Models\Payment;
 use Fieroo\Exhibitors\Models\Exhibitor;
-// use App\Models\Order;
+use Fieroo\Stands\Models\StandsTypeTranslation;
+use Fieroo\Furnitures\Models\Furnishing;
+use Fieroo\Payment\Models\Order;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Validator;
@@ -17,15 +19,6 @@ use \stdClass;
 
 class EventController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    // public function __construct()
-    // {
-    //     $this->middleware('auth');
-    // }
 
     /**
      * Display a listing of the resource.
@@ -104,12 +97,6 @@ class EventController extends Controller
         return view('events::show', ['event' => $event]);
     }
 
-    // public function subscription($id)
-    // {
-    //     // check if user logged has payment info
-    //     // subscribe user logged to the event $id
-    // }
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -166,29 +153,23 @@ class EventController extends Controller
         }
     }
 
+    private function _subscriptions($event, $user_id, $type = 'subscription', $checkFail = true)
+    {
+        $query = $event->subscriptions()->where([
+            // ['user_id','=', auth()->user()->id],
+            ['user_id','=', $user_id],
+            ['type_of_payment','=',$type]
+        ]);
+        return $checkFail ? $query->firstOrFail() : $query->first();
+    }
+
     public function indexFurnishings($event_id)
     {
-        $payment_data = DB::table('payments')->where([
-            ['event_id','=',$event_id],
-            ['user_id','=',auth()->user()->id],
-            ['type_of_payment','=','subscription']
-        ])->first();
-        if(!is_object($payment_data)) {
-            abort(404);
-        }
+        $event = Event::findOrFail($event_id);
+        $payment_data = self::_subscriptions($event, auth()->user()->id);
+
         $n_modules = $payment_data->n_modules;
         $stand_type_id = $payment_data->stand_type_id;
-
-        $exhibitor = DB::table('exhibitors')->where('user_id','=',auth()->user()->id)->first();
-        if(!is_object($exhibitor)) {
-            abort(404);
-        }
-        $exhibitor_data = DB::table('exhibitors_data')
-            ->where('exhibitor_id','=',$exhibitor->id)
-            ->first();
-        if(!is_object($exhibitor_data)) {
-            abort(404);
-        }
 
         $modules = [];
         for($i = 0; $i < $n_modules; $i++) {
@@ -213,53 +194,41 @@ class EventController extends Controller
             ->get();
                 
         foreach($list as $l) {
-            $l->variants = DB::table('furnishings')->where('variant_id', '=', $l->id)->get();
+            $l->variants = Furnishing::where('variant_id', '=', $l->id)->get();
         }
 
-        $stand_trans = DB::table('stands_types_translations')->where([
+        $stand_trans = StandsTypeTranslation::where([
             ['locale','=',App::getLocale()],
             ['stand_type_id','=',$stand_type_id],
-        ])->first();
-        if(!is_object($stand_trans)) {
-            abort(404);
-        }
-        $stand_name = $stand_trans->name;
+        ])->firstOrFail();
         
-        return view('events::furnishings', ['event_id' => $event_id,'list' => $list, 'modules' => $modules, 'exhibitor_data' => $exhibitor_data, 'stand_type_id' => $stand_type_id, 'stand_name' => $stand_name]);
+        return view('events::furnishings', [
+            'event_id' => $event->id,
+            'list' => $list, 
+            'modules' => $modules, 
+            'exhibitor_data' => auth()->user()->exhibitor->detail,
+            // 'exhibitor_data' => $event->user->exhibitor->detail,
+            'stand_type_id' => $stand_type_id, 
+            'stand_name' => $stand_trans->name
+        ]);
     }
 
     public function recapFurnishings($event_id, $exhibitor_id)
     {
-        $orders = DB::table('orders')
-            ->leftJoin('furnishings_translations','orders.furnishing_id','=','furnishings_translations.furnishing_id')
-            ->where([
-                // ['orders.exhibitor_id','=',auth()->user()->exhibitor->id],
-                ['orders.exhibitor_id','=',$exhibitor_id],
-                ['orders.event_id','=',$event_id],
-                ['furnishings_translations.locale','=',App::getLocale()]
-            ])
-            ->select('orders.furnishing_id', DB::raw('sum(qty) as qty'), DB::raw('sum(price) as price'), 'furnishings_translations.description')
-            ->groupBy('orders.furnishing_id','furnishings_translations.description')
-            ->get();
-
+        $event = Event::findOrFail($event_id);
         $exhibitor = Exhibitor::findOrFail($exhibitor_id);
-
-        $payment_data = DB::table('payments')->where([
-            ['event_id','=',$event_id],
-            // ['user_id','=',auth()->user()->id],
-            ['user_id','=',$exhibitor->user->id],
-            ['type_of_payment','=','subscription']
-        ])->first();
-        if(!is_object($payment_data)) {
-            abort(404);
+        
+        $orders = Order::where([
+            ['orders.exhibitor_id','=',$exhibitor_id],
+            ['orders.event_id','=',$event_id],
+        ])->get();
+        foreach($orders as $order) {
+            $order->description = $order->furnishing->is_variant ? $order->furnishing->parent->translations()->where('locale',App::getLocale())->first()->description : $order->furnishing->translations()->where('locale',App::getLocale())->first()->description;
         }
 
-        $extra_furnishings_payment = DB::table('payments')->where([
-            ['event_id','=',$event_id],
-            // ['user_id','=',auth()->user()->id],
-            ['user_id','=',$exhibitor->user->id],
-            ['type_of_payment','=','furnishing']
-        ])->first();
+        $payment_data = self::_subscriptions($event, $exhibitor->user->id);
+
+        $extra_furnishings_payment = self::_subscriptions($event, $exhibitor->user->id, 'furnishing', false);
         $extra = 0;
         if(is_object($extra_furnishings_payment)) {
             $extra = $extra_furnishings_payment->amount;
@@ -268,13 +237,10 @@ class EventController extends Controller
         $n_modules = $payment_data->n_modules;
         $amount = $payment_data->amount;
 
-        $stand_trans = DB::table('stands_types_translations')->where([
+        $stand_trans = StandsTypeTranslation::where([
             ['locale','=',App::getLocale()],
             ['stand_type_id','=',$payment_data->stand_type_id],
-        ])->first();
-        if(!is_object($stand_trans)) {
-            abort(404);
-        }
+        ])->firstOrFail();
 
         return view('events::recap', [
             'extra' => $extra,
@@ -282,18 +248,13 @@ class EventController extends Controller
             'n_modules' => $n_modules,
             'amount' => $amount,
             'stand_name' => $stand_trans->name,
-            'back_url' => 'admin/dashboard'
-            // 'back_url' => 'admin/events/'.$event_id.'/exhibitors'
+            'back_url' => 'admin/dashboard',
         ]);
     }
 
     public function indexExhibitors($event_id)
     {
         $event = Event::findOrFail($event_id);
-        // $subscriptions = Event::where('id', '=', $event_id)
-        //     ->whereHas('subscriptions', function($q) {
-        //         $q->where('type_of_payment', 'subscription');
-        //     })->get();
         $subscriptions = Payment::where([
             ['event_id', '=', $event_id],
             ['type_of_payment', '=', 'subscription'],

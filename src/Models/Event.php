@@ -5,6 +5,7 @@ namespace Fieroo\Events\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Fieroo\Payment\Models\Payment;
+use Fieroo\Bootstrapper\Models\User;
 
 class Event extends Model
 {
