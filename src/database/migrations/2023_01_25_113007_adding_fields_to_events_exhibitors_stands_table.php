@@ -13,11 +13,6 @@ class AddingFieldsToEventsExhibitorsStandsTable extends Migration
      */
     public function up()
     {
-        Schema::table('events_exhibitors_stands', function (Blueprint $table) {
-            $table->boolean('is_furnished')->default(0)->after('n_modules');
-            $table->boolean('catalog_is_completed')->default(0)->after('n_modules');
-        });
-
         Schema::table('exhibitors_data', function(Blueprint $table) {
             $table->dropColumn([
                 'close_catalog',
@@ -40,10 +35,6 @@ class AddingFieldsToEventsExhibitorsStandsTable extends Migration
      */
     public function down()
     {
-        Schema::table('events_exhibitors_stands', function (Blueprint $table) {
-            $table->dropColumn(['is_furnished', 'catalog_is_completed']);
-        });
-
         Schema::table('exhibitors_data', function(Blueprint $table) {
             $table->boolean('close_catalog')->default(0)->after('locale');
             $table->boolean('close_furnishings')->default(0)->after('locale');

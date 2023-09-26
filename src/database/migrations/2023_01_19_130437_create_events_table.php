@@ -20,14 +20,6 @@ class CreateEventsTable extends Migration
             $table->date('end')->nullable();
             $table->timestamps();
         });
-
-        Schema::create('events_exhibitors', function(Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('event_id');
-            $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
-            $table->unsignedBigInteger('exhibitor_id');
-            $table->foreign('exhibitor_id')->references('id')->on('exhibitors')->onDelete('cascade');
-        });
     }
 
     /**
@@ -37,7 +29,6 @@ class CreateEventsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('events_exhibitors');
         Schema::dropIfExists('events');
     }
 }
