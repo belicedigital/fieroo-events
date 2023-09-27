@@ -249,26 +249,32 @@
                         let val_min = parseInt(data.data.min)
                         let val_max = parseInt(data.data.max)
                         if (val_extra_price) {
-                            row.removeClass().addClass('bg-primary')
+                            // row.removeClass().addClass('bg-primary')
                             row.find('input[name="qty"]').attr('min', '0')
                             row.find('input[name="qty"]').val('0')
                             row.find('td[name="qty_max_supplied"]').text('N/A')
                         } else if (val_is_supplied) {
-                            row.removeClass().addClass('bg-success')
-                            if (val_min > 0) {
-                                row.removeClass().addClass('bg-warning')
-                            }
+                            // row.removeClass().addClass('bg-success')
+                            // if (val_min > 0) {
+                            //     row.removeClass().addClass('bg-warning')
+                            // }
                             row.find('input[name="qty"]').attr('min', val_min > 0 ? val_min : 0)
                             row.find('input[name="qty"]').val(val_max > 0 ? val_max : 0)
                             row.find('td[name="qty_max_supplied"]').text(val_max)
                         }
                         if (is_variant && !val_extra_price && val_is_supplied) {
                             extra_price = "{{ trans('generals.yes') }}"
-                            row.removeClass().addClass('bg-success')
-                            if (val_min > 0) {
-                                row.removeClass().addClass('bg-warning')
-                            }
+                            // row.removeClass().addClass('bg-success')
+                            // if (val_min > 0) {
+                            //     row.removeClass().addClass('bg-warning')
+                            // }
+                        } else if (!is_variant && !val_is_supplied) {
+                            extra_price = "{{ trans('generals.no') }}"
+                            row.find('input[name="qty"]').attr('min', val_min > 0 ? val_min : 0)
+                            row.find('input[name="qty"]').val(val_max > 0 ? val_max : 0)
+                            row.find('td[name="qty_max_supplied"]').text(val_max)
                         }
+                        console.log(val_is_supplied)
                         row.find('td[name="is_supplied"]').text(extra_price)
                         row.find('td[name="price"] span').text(data.data.price)
                         row.find('td[name="size"]').text(data.data.size)
