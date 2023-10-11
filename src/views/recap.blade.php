@@ -16,11 +16,16 @@
             <div class="col-12">
                 <div class="callout callout-info">
                     <p class="m-0"><strong>{{ trans('generals.stand_price') }}</strong> {{ $amount }} €</p>
-                    @if ($extra > 0)
+                    <p class="m-0"><strong>{{ trans('generals.n_modules') }}</strong> {{ $n_modules }}</p>
+                @if ($extra > 0)
                         <p class="m-0"><strong>{{ trans('generals.furnishing_not_supplied_price') }}</strong>
                             {{ $extra }} €</p>
-                    @endif
-                    <p class="m-0"><strong>{{ trans('generals.n_modules') }}</strong> {{ $n_modules }}</p>
+                        <p class="m-0"><strong>{{ trans('generals.tax') }} ({{ $iva }}%)</strong> {{ ($amount + $extra) * $iva / 100 }} €</p>
+                        <p class="m-0"><strong>{{ trans('generals.total_tax') }}</strong> {{ $amount + $extra + (($amount + $extra) * ($iva / 100)) }} €</p>
+                @else
+                        <p class="m-0"><strong>{{ trans('generals.tax') }} ({{ $iva }}%)</strong> {{ $amount * $iva / 100 }} €</p>
+                        <p class="m-0"><strong>{{ trans('generals.total_tax') }}</strong> {{ $amount + ($amount * $iva / 100) }} €</p>
+                @endif
                 </div>
             </div>
         </div>

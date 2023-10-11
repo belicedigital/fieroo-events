@@ -71,14 +71,6 @@
                                 aria-labelledby="checkout-part-trigger">
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-12 col-md-12">
-                                        {{-- <form class="d-flex py-5 justify-content-center align-items-center" action="{{route('payment')}}" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="stand_selected">
-                                        <input type="hidden" name="modules_selected">
-                                        <input type="hidden" name="event_id" value="{{$event->id}}">
-                                        <input type="hidden" name="type_of_payment" value="subscription">
-                                        <button type="submit" class="btn btn-lg btn-block btn-success"><i class="fab fa-paypal"></i> {{trans('generals.paypal_payment_btn')}}</button>
-                                    </form> --}}
                                         <form id="stripePayment" class="d-flex flex-column py-5"
                                             action="{{ route('stripe-payment') }}" method="POST">
                                             @csrf
@@ -114,8 +106,9 @@
                         <h3 class="mb-2">{{ trans('generals.details_price_checkout') }}</h3>
                         <p class="m-0" id="price">{{ trans('generals.stand_price_checkout') }} <span></span> €</p>
                         <p class="m-0" id="size">{{ trans('generals.stand_size_checkout') }} <span></span></p>
-                        <p class="m-0" id="total">{{ trans('generals.subtotal_price_checkout') }} <span></span> €
-                        </p>
+                        <p class="m-0" id="total">{{ trans('generals.subtotal_price_checkout') }} <span></span> €</p>
+                        <p class="m-0" id="tax">{{ trans('generals.tax') }} (<span>{{ $iva }}</span>%): <span id="tot-tax"></span>%</p>
+                        <p class="m-0" id="total-tax">{{ trans('generals.total_tax') }} <span></span> €</p>
                     </div>
                 </div>
             </div>
@@ -216,6 +209,7 @@
             $('#price').find('span').text('')
             $('#size').find('span').text('')
             $('#total').find('span').text('')
+            $('#total-tax').find('span').text('')
         }
         const checkHasErrorFirstStep = () => {
             console.log($('select[name="stand_type"]').val(), $('select[name="n_modules"]').val())
@@ -234,10 +228,20 @@
             }
         })
         const assignCalcs = () => {
-            let tot = $('#price').find('span').text() * $('select[name="n_modules"]').val()
-            tot = parseFloat(tot).toFixed(2)
-            $('#total').find('span').text(tot)
-        }
+            const pricePerModule = parseFloat($('#price').find('span').text());
+            const numberOfModules = parseInt($('select[name="n_modules"]').val());
+            const ivaText = parseInt($('#tax > span').text());
+            const iva = ivaText / 100;
+
+            const subTotal = pricePerModule * numberOfModules;
+
+            const totalWithoutTax = subTotal;
+            const totalWithTax = subTotal + (subTotal * iva);
+
+            $('#total').find('span').text(totalWithoutTax.toFixed(2));
+            $('#total-tax').find('span').text(totalWithTax.toFixed(2));
+            $('#tot-tax').text((totalWithTax - totalWithoutTax).toFixed(2));
+        };
         $(document).ready(function() {
             initStripe();
             getStands();
@@ -258,6 +262,7 @@
             })
             $('select[name="n_modules"]').on('change', function(e) {
                 $('#total').find('span').text('')
+                $('#total-tax').find('span').text('')
                 assignCalcs()
                 $('input[name="modules_selected"]').val($('select[name="n_modules"]').val())
             })

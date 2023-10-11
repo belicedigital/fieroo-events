@@ -11,7 +11,7 @@ use Fieroo\Exhibitors\Models\Exhibitor;
 use Fieroo\Stands\Models\StandsTypeTranslation;
 use Fieroo\Furnitures\Models\Furnishing;
 use Fieroo\Payment\Models\Order;
-use Illuminate\Support\Str;
+use Fieroo\Bootstrapper\Models\Setting;
 use Carbon\Carbon;
 use Validator;
 use DB;
@@ -82,7 +82,7 @@ class EventController extends Controller
                 ->withErrors($e->getMessage())
                 ->withInput();
         }
-        
+
     }
 
     /**
@@ -94,7 +94,8 @@ class EventController extends Controller
     public function show($id)
     {
         $event = Event::findOrFail($id);
-        return view('events::show', ['event' => $event]);
+        $setting = Setting::take(1)->first();
+        return view('events::show', ['event' => $event, 'iva' => $setting->iva]);
     }
 
     /**
@@ -192,7 +193,7 @@ class EventController extends Controller
             ->orderBy('furnishings_stands_types.is_supplied', 'DESC')
             ->orderBy('furnishings_stands_types.min', 'ASC')
             ->get();
-                
+
         foreach($list as $l) {
             $l->variants = Furnishing::where('variant_id', '=', $l->id)->get();
         }
@@ -201,15 +202,17 @@ class EventController extends Controller
             ['locale','=',App::getLocale()],
             ['stand_type_id','=',$stand_type_id],
         ])->firstOrFail();
-        
+
+        $setting = Setting::take(1)->first();
+
         return view('events::furnishings', [
             'event_id' => $event->id,
-            'list' => $list, 
-            'modules' => $modules, 
+            'list' => $list,
+            'modules' => $modules,
             'exhibitor_data' => auth()->user()->exhibitor->detail,
-            // 'exhibitor_data' => $event->user->exhibitor->detail,
-            'stand_type_id' => $stand_type_id, 
-            'stand_name' => $stand_trans->name
+            'stand_type_id' => $stand_type_id,
+            'stand_name' => $stand_trans->name,
+            'iva' => $setting->iva
         ]);
     }
 
@@ -217,7 +220,7 @@ class EventController extends Controller
     {
         $event = Event::findOrFail($event_id);
         $exhibitor = Exhibitor::findOrFail($exhibitor_id);
-        
+
         $orders = Order::where([
             ['orders.exhibitor_id','=',$exhibitor_id],
             ['orders.event_id','=',$event_id],
@@ -242,6 +245,8 @@ class EventController extends Controller
             ['stand_type_id','=',$payment_data->stand_type_id],
         ])->firstOrFail();
 
+        $setting = Setting::take(1)->first();
+
         return view('events::recap', [
             'extra' => $extra,
             'orders' => $orders,
@@ -249,6 +254,7 @@ class EventController extends Controller
             'amount' => $amount,
             'stand_name' => $stand_trans->name,
             'back_url' => 'admin/dashboard',
+            'iva' => $setting->iva
         ]);
     }
 

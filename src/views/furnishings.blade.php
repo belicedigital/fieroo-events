@@ -3,29 +3,22 @@
 @section('title_header', trans('entities.furnishings') . ' ' . $stand_name)
 @section('buttons')
     <div>
-        <p class="mb-3 bg-danger text-center p-3 text-lg"><strong>{{ trans('generals.total') }}</strong>: <span
-                data-total></span> €</p>
-        {{-- <form id="payment-form" class="d-flex justify-content-center align-items-center"
-            action="{{ route('payment-furnishings') }}" method="POST">
-            @csrf
-            <input type="hidden" name="stand_type_id" value="{{ $stand_type_id }}">
-            <input type="hidden" name="event_id" value="{{ $event_id }}">
-            <input type="hidden" name="type_of_payment" value="furnishing">
-            <input type="hidden" name="data">
-            <button type="submit" class="btn btn-success text-uppercase"><i class="fab fa-cc-stripe"></i>
-                {{ trans('generals.proceed_order') }}</button>
-        </form> --}}
+        <p class="mb-3 bg-danger text-center p-3 text-lg">
+            <strong>{{ trans('generals.total') }}</strong>: <span
+                data-total></span>€
+            <br>
+            <strong>{{ trans('generals.tax') }}</strong>: <span
+                data-tax="{{ $iva }}">{{ $iva }}</span>%
+            <br>
+            <strong>{{ trans('generals.total_tax') }}</strong>: <span
+                data-total-tax></span>€
+        </p>
         <button type="button" class="btn btn-success text-uppercase" data-toggle="modal" data-target="#modalPayment">
             <i class="fab fa-cc-stripe"></i> {{ trans('generals.proceed_order') }}
         </button>
-        {{-- <button type="button" class="btn btn-success text-uppercase" onclick="closeOrder(this)"><i class="fas fa-check mr-1"></i> {{trans('generals.confirm_order')}}</button> --}}
     </div>
 @endsection
 @section('content')
-
-    {{-- <input type="hidden" name="stand_type_id" value="{{$stand_type_id}}">
-<input type="hidden" name="event_id" value="{{$event_id}}">
---}}
     <div class="container-fluid">
         @if (Session::has('success'))
             @include('admin.partials.success')
@@ -221,8 +214,6 @@
                             $('#stripePayment').trigger('submit')
                         }
                         $('#modalPayment').hide()
-                        // $('#paymentMethodId').val(paymentMethod.id)
-                        // $('#stripePayment').trigger('submit')
                     })
                 }
             });
@@ -249,25 +240,16 @@
                         let val_min = parseInt(data.data.min)
                         let val_max = parseInt(data.data.max)
                         if (val_extra_price) {
-                            // row.removeClass().addClass('bg-primary')
                             row.find('input[name="qty"]').attr('min', '0')
                             row.find('input[name="qty"]').val('0')
                             row.find('td[name="qty_max_supplied"]').text('N/A')
                         } else if (val_is_supplied) {
-                            // row.removeClass().addClass('bg-success')
-                            // if (val_min > 0) {
-                            //     row.removeClass().addClass('bg-warning')
-                            // }
                             row.find('input[name="qty"]').attr('min', val_min > 0 ? val_min : 0)
                             row.find('input[name="qty"]').val(val_max > 0 ? val_max : 0)
                             row.find('td[name="qty_max_supplied"]').text(val_max)
                         }
                         if (is_variant && !val_extra_price && val_is_supplied) {
                             extra_price = "{{ trans('generals.yes') }}"
-                            // row.removeClass().addClass('bg-success')
-                            // if (val_min > 0) {
-                            //     row.removeClass().addClass('bg-warning')
-                            // }
                         } else if (!is_variant && !val_is_supplied) {
                             extra_price = "{{ trans('generals.no') }}"
                             row.find('input[name="qty"]').attr('min', val_min > 0 ? val_min : 0)
@@ -306,7 +288,6 @@
             let max_value = parseInt(row.attr('data-max'))
             let max = parseInt(is_supplied ? (extra_price ? 0 : max_value) : 0)
             let subtotal = 0
-            //console.log(price, qty, extra_price, max, subtotal)
             if (extra_price) {
                 subtotal = parseFloat(price * qty)
             } else {
@@ -319,7 +300,6 @@
                     subtotal = parseFloat(price * qty)
                 }
             }
-            console.log(row, subtotal)
             row.find('[data-total-partial]').text(subtotal)
         }
 
@@ -330,6 +310,16 @@
                 total += value
             });
             return total
+        }
+
+        const getTotalWithTax = () => {
+            let total = 0
+            const iva = 0.22
+            $.each($('[data-total-partial]'), function(index, element) {
+                let value = parseInt($(element).text())
+                total += value
+            });
+            return total + (total * iva)
         }
 
         const initSubTotal = (row) => {
@@ -343,6 +333,7 @@
             }
 
             $('[data-total]').text(getTotalOfPartials())
+            $('[data-total-tax]').text(getTotalWithTax())
         }
 
         const formatData = () => {
@@ -355,56 +346,11 @@
                     row.qty = qty
                     row.is_supplied = $(e).find('[name="is_supplied"]').attr('data-value')
                     row.price = $(e).find('[data-total-partial]').text()
-                    //row.module_id = $(e).closest('table').attr('data-module-id')
                     obj.push(row)
                 }
             })
             return obj
         }
-
-        // const closeOrder = (el) => {
-        //     let event_id = $('input[name="event_id"]').val()
-        //     let stand_type_id = $('input[name="stand_type_id"]').val()
-        //     Swal.fire({
-        //         icon: 'warning',
-        //         title: "{!! trans('generals.confirm_order') !!}",
-        //         //html: "{{ trans('messages.default_cart') }}" + "{!! trans('messages.required_furnishings') !!}",
-        //         html: "{!! trans('messages.confirm_order') !!}",
-        //         showCancelButton: true,
-        //         confirmButtonText: "{{ trans('generals.confirm') }}",
-        //         cancelButtonText: "{{ trans('generals.cancel') }}",
-        //     }).then((result) => {
-        //         if (result.isConfirmed) {
-        //             $(el).addClass('disabled')
-        //             //common_request.post('/admin/cart/confirm')
-        //             common_request.post('/admin/paypal/furnishings', {
-        //                 event_id: event_id,
-        //                 stand_type_id: stand_type_id,
-        //                 data: JSON.stringify(formatData())
-        //             })
-        //             .then(response => {
-        //                 let data = response.data
-        //                 if(data.status) {
-        //                     toastr.success(data.message, '', {
-        //                         onShown: function() {
-        //                             setTimeout(function(){
-        //                                 window.location.reload()
-        //                             }, 2000);
-        //                         }
-        //                     })
-        //                 } else {
-        //                     $(el).removeClass('disabled')
-        //                     toastr.error(data.message)
-        //                 }
-        //             })
-        //             .catch(error => {
-        //                 $(el).removeClass('disabled')
-        //                 toastr.error(error)
-        //                 console.log(error)
-        //             })
-        //         }
-        //     })
-        // }
 
         $(document).ready(function() {
             $('#modalPayment').on('show.bs.modal', function() {
@@ -419,8 +365,6 @@
                 let id = $this.find('option:selected').data('opt-id')
                 let is_variant = $this.find('option:selected').data('is-variant')
                 updateData(row, id, is_variant)
-                //initSubTotal(row)
-                //checkItemInCart(id)
             });
 
             $('input[type="number"]').on('change', function() {
