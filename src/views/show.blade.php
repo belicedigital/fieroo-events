@@ -106,8 +106,10 @@
                         <h3 class="mb-2">{{ trans('generals.details_price_checkout') }}</h3>
                         <p class="m-0" id="price">{{ trans('generals.stand_price_checkout') }} <span></span> €</p>
                         <p class="m-0" id="size">{{ trans('generals.stand_size_checkout') }} <span></span></p>
-                        <p class="m-0" id="total">{{ trans('generals.subtotal_price_checkout') }} <span></span> €</p>
-                        <p class="m-0" id="tax">{{ trans('generals.tax') }} (<span>{{ $iva }}</span>%): <span id="tot-tax"></span>%</p>
+                        <p class="m-0" id="total">{{ trans('generals.subtotal_price_checkout') }} <span></span> €
+                        </p>
+                        <p class="m-0" id="tax">{{ trans('generals.tax') }}
+                            (<span>{{ $iva }}</span>%): <span id="tot-tax"></span>%</p>
                         <p class="m-0" id="total-tax">{{ trans('generals.total_tax') }} <span></span> €</p>
                     </div>
                 </div>
@@ -245,6 +247,7 @@
         $(document).ready(function() {
             initStripe();
             getStands();
+            console.log('ciao');
             $('select[name="stand_type"]').on('change', function(e) {
                 resetCalcs()
                 let selected = $('select[name="stand_type"]').find(':selected');
