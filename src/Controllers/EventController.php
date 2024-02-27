@@ -67,14 +67,16 @@ class EventController extends Controller
         }
 
         try {
-            // check events limit for subscription
-            $request_to_api = Http::get('https://manager-fieroo.belicedigital.com/api/stripe/'.env('CUSTOMER_EMAIL').'/check-limit/max_events');
-            if (!$request_to_api->successful()) {
-                throw new \Exception('API Error on get latest subscription '.$request_to_api->body());
-            }
-            $result_api = $request_to_api->json();
-            if(isset($result_api['value']) && Event::all()->count() >= $result_api['value']) {
-                throw new \Exception('Hai superato il limite di Eventi previsti dal tuo piano di abbonamento, per inserire altri Eventi dovrai passare ad un altro piano aumentando il limite di eventi disponibili.');
+            if(!env('UNLIMITED')) {
+                // check events limit for subscription
+                $request_to_api = Http::get('https://manager-fieroo.belicedigital.com/api/stripe/'.env('CUSTOMER_EMAIL').'/check-limit/max_events');
+                if (!$request_to_api->successful()) {
+                    throw new \Exception('API Error on get latest subscription '.$request_to_api->body());
+                }
+                $result_api = $request_to_api->json();
+                if(isset($result_api['value']) && Event::all()->count() >= $result_api['value']) {
+                    throw new \Exception('Hai superato il limite di Eventi previsti dal tuo piano di abbonamento, per inserire altri Eventi dovrai passare ad un altro piano aumentando il limite di eventi disponibili.');
+                }
             }
 
             $event = Event::create([
