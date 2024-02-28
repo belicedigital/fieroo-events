@@ -103,14 +103,24 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <h3 class="mb-2">{{ trans('generals.details_price_checkout') }}</h3>
-                        <p class="m-0" id="price">{{ trans('generals.stand_price_checkout') }} <span></span> €</p>
-                        <p class="m-0" id="size">{{ trans('generals.stand_size_checkout') }} <span></span></p>
-                        <p class="m-0" id="total">{{ trans('generals.subtotal_price_checkout') }} <span></span> €
-                        </p>
-                        <p class="m-0" id="tax">{{ trans('generals.tax') }}
-                            (<span>{{ $iva }}</span>%): <span id="tot-tax"></span>%</p>
-                        <p class="m-0" id="total-tax">{{ trans('generals.total_tax') }} <span></span> €</p>
+                        <div class="flex align-start">
+                            <div>
+                                <h3 class="mb-2">{{ trans('generals.details_price_checkout') }}</h3>
+                                <p class="m-0" id="price">{{ trans('generals.stand_price_checkout') }} <span></span>
+                                    €</p>
+                                <p class="m-0" id="size">{{ trans('generals.stand_size_checkout') }} <span></span>
+                                </p>
+                                <p class="m-0" id="total">{{ trans('generals.subtotal_price_checkout') }}
+                                    <span></span> €
+                                </p>
+                                <p class="m-0" id="tax">{{ trans('generals.tax') }}
+                                    (<span>{{ $iva }}</span>%): <span id="tot-tax"></span>%</p>
+                                <p class="m-0" id="total-tax">{{ trans('generals.total_tax') }} <span></span> €</p>
+                            </div>
+                            <div>
+                                <p id="stand_description"></p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -173,6 +183,7 @@
                             option.modules = value.max_number_modules
                             option.price = value.price
                             option.size = value.size
+                            option.description = value.description
                             $('select[name="stand_type"]').append(option)
                         })
                         $('select[name="stand_type"]').select2({
@@ -247,12 +258,13 @@
         $(document).ready(function() {
             initStripe();
             getStands();
-            console.log('ciao');
             $('select[name="stand_type"]').on('change', function(e) {
                 resetCalcs()
                 let selected = $('select[name="stand_type"]').find(':selected');
                 let price = selected[0].price
                 let size = selected[0].size
+                let description = selected[0].description
+                $('#stand_description').text(description)
                 $('#price').find('span').text(price)
                 $('#size').find('span').text(size)
                 $('input[name="stand_selected"]').val($('select[name="stand_type"]').val())
