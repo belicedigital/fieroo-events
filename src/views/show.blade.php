@@ -103,7 +103,10 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <div class="flex align-start">
+                        <div class="d-flex align-start">
+                            <div>
+                                <p id="stand_description"></p>
+                            </div>
                             <div>
                                 <h3 class="mb-2">{{ trans('generals.details_price_checkout') }}</h3>
                                 <p class="m-0" id="price">{{ trans('generals.stand_price_checkout') }} <span></span>
@@ -116,9 +119,6 @@
                                 <p class="m-0" id="tax">{{ trans('generals.tax') }}
                                     (<span>{{ $iva }}</span>%): <span id="tot-tax"></span>%</p>
                                 <p class="m-0" id="total-tax">{{ trans('generals.total_tax') }} <span></span> €</p>
-                            </div>
-                            <div>
-                                <p id="stand_description"></p>
                             </div>
                         </div>
                     </div>
