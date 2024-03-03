@@ -258,7 +258,7 @@
                 let price = selected[0].price
                 let size = selected[0].size
                 let description = selected[0].description
-                $('#stand_description').text(description)
+                $('#stand_description').html(description)
                 $('#price').find('span').text(price)
                 $('#size').find('span').text(size)
                 $('input[name="stand_selected"]').val($('select[name="stand_type"]').val())
