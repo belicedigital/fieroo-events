@@ -4,14 +4,11 @@
 @section('buttons')
     <div>
         <p class="mb-3 bg-danger text-center p-3 text-lg">
-            <strong>{{ trans('generals.total') }}</strong>: <span
-                data-total></span>€
+            <strong>{{ trans('generals.total') }}</strong>: <span data-total></span>€
             <br>
-            <strong>{{ trans('generals.tax') }}</strong>: <span
-                data-tax="{{ $iva }}">{{ $iva }}</span>%
+            <strong>{{ trans('generals.tax') }}</strong>: <span data-tax="{{ $iva }}">{{ $iva }}</span>%
             <br>
-            <strong>{{ trans('generals.total_tax') }}</strong>: <span
-                data-total-tax></span>€
+            <strong>{{ trans('generals.total_tax') }}</strong>: <span data-total-tax></span>€
         </p>
         <button type="button" class="btn btn-success text-uppercase" data-toggle="modal" data-target="#modalPayment">
             <i class="fab fa-cc-stripe"></i> {{ trans('generals.proceed_order') }}
@@ -145,7 +142,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="stripePayment" class="d-flex flex-column" action="{{ route('payment-furnishings') }}"
+                    <form id="stripePayment" class="d-flex flex-column" action="{{ route('payment-furnishingss') }}"
                         method="POST">
                         @csrf
                         <input type="hidden" name="stand_type_id" value="{{ $stand_type_id }}">
