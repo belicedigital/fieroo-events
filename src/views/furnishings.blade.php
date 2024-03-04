@@ -351,7 +351,7 @@
 
         $(document).ready(function() {
             $('#modalPayment').on('show.bs.modal', function() {
-                initStripe()
+                // initStripe()
             })
 
             initSubTotal()

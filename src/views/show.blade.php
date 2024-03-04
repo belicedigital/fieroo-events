@@ -261,7 +261,7 @@
             $('#tot-tax').text((totalWithTax - totalWithoutTax).toFixed(2));
         };
         $(document).ready(function() {
-            initStripe();
+            //initStripe();
             getStands();
             $('select[name="stand_type"]').on('change', function(e) {
                 resetCalcs()
