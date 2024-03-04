@@ -72,7 +72,7 @@
                                 aria-labelledby="checkout-part-trigger">
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-12 col-md-12">
-                                        <form id="stripePayment" class="d-flex flex-column py-5"
+                                        {{-- <form id="stripePayment" class="d-flex flex-column py-5"
                                             action="{{ route('stripe-payment') }}" method="POST">
                                             @csrf
                                             <input type="hidden" name="stand_selected">
@@ -89,6 +89,17 @@
                                             <button id="card-button" class="btn btn-lg btn-block btn-success"><i
                                                     class="fab fa-cc-stripe"></i>
                                                 {{ trans('generals.stripe_payment_btn') }}</button>
+                                        </form> --}}
+                                        <form class="d-flex py-5 justify-content-center align-items-center"
+                                            action="{{ route('payment') }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="stand_selected">
+                                            <input type="hidden" name="modules_selected">
+                                            <input type="hidden" name="event_id" value="{{ $event->id }}">
+                                            <input type="hidden" name="type_of_payment" value="subscription">
+                                            <button type="submit" class="btn btn-lg btn-block btn-success"><i
+                                                    class="fab fa-paypal"></i>
+                                                {{ trans('generals.paypal_payment_btn') }}</button>
                                         </form>
                                     </div>
                                 </div>
