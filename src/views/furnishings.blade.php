@@ -142,7 +142,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="stripePayment" class="d-flex flex-column" action="{{ route('payment-furnishingss') }}"
+                    <form id="stripePayment" class="d-flex flex-column" action="{{ route('payment-furnishings') }}"
                         method="POST">
                         @csrf
                         <input type="hidden" name="stand_type_id" value="{{ $stand_type_id }}">
