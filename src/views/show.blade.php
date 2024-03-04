@@ -124,7 +124,7 @@
                             <span></span> €
                         </p>
                         <p class="m-0" id="tax">{{ trans('generals.tax') }}
-                            (<span>{{ $iva }}</span>%): <span id="tot-tax"></span>€</p>
+                            (<span>{{ $iva }}</span>%): <span id="tot-tax"></span> €</p>
                         <p class="m-0" id="total-tax">{{ trans('generals.total_tax') }} <span></span> €</p>
                     </div>
                 </div>
