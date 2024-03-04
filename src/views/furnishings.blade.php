@@ -142,7 +142,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="stripePayment" class="d-flex flex-column" action="{{ route('payment-furnishings') }}"
+                    {{-- <form id="stripePayment" class="d-flex flex-column" action="{{ route('payment-furnishings') }}"
                         method="POST">
                         @csrf
                         <input type="hidden" name="stand_type_id" value="{{ $stand_type_id }}">
@@ -163,6 +163,16 @@
                         <button id="card-button" class="btn btn-lg btn-block btn-success"><i
                                 class="fab fa-cc-stripe"></i>
                             {{ trans('generals.stripe_payment_btn') }}</button>
+                    </form> --}}
+                    <form class="d-flex py-5 justify-content-center align-items-center"
+                        action="{{ route('spayment-furnishings') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="stand_type_id" value="{{ $stand_type_id }}">
+                        <input type="hidden" name="data">
+                        <input type="hidden" name="event_id" value="{{ $event->id }}">
+                        <input type="hidden" name="type_of_payment" value="furnishing">
+                        <button type="submit" class="btn btn-lg btn-block btn-success"><i class="fab fa-paypal"></i>
+                            {{ trans('generals.paypal_payment_btn') }}</button>
                     </form>
                 </div>
             </div>
@@ -350,9 +360,9 @@
         }
 
         $(document).ready(function() {
-            $('#modalPayment').on('show.bs.modal', function() {
-                // initStripe()
-            })
+            // $('#modalPayment').on('show.bs.modal', function() {
+            //     initStripe()
+            // })
 
             initSubTotal()
 
