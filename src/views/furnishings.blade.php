@@ -171,7 +171,8 @@
                         <input type="hidden" name="data">
                         <input type="hidden" name="event_id" value="{{ $event_id }}">
                         <input type="hidden" name="type_of_payment" value="furnishing">
-                        <button type="submit" class="btn btn-lg btn-block btn-success"><i class="fab fa-paypal"></i>
+                        <button type="submit" class="btn btn-lg btn-block btn-success" disabled><i
+                                class="fab fa-paypal"></i>
                             {{ trans('generals.paypal_payment_btn') }}</button>
                     </form>
                 </div>
@@ -342,7 +343,6 @@
             $('[data-total]').text(getTotalOfPartials())
             $('[data-total-tax]').text(getTotalWithTax())
 
-            $('#paypalPayment button').attr('disabled');
             if (getTotalWithTax() !== 0) {
                 $('#paypalPayment button').removeAttr('disabled');
             }
