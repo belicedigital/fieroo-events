@@ -341,10 +341,6 @@
 
             $('[data-total]').text(getTotalOfPartials())
             $('[data-total-tax]').text(getTotalWithTax())
-
-            if (getTotalWithTax() !== 0) {
-                $('button[data-target="#modalPayment"]').removeAttr('disabled');
-            }
         }
 
         const formatData = () => {
@@ -386,6 +382,12 @@
             })
 
             initSubTotal()
+
+            $('input[name="data"]').on('change', function() {
+                if ($('input[name="data"]').val().length > 0) {
+                    $('button[data-target="#modalPayment"]').removeAttr('disabled');
+                }
+            })
 
             $('select[name="variant"]').on('change', function() {
                 let $this = $(this)
