@@ -169,7 +169,7 @@
                         @csrf
                         <input type="hidden" name="stand_type_id" value="{{ $stand_type_id }}">
                         <input type="hidden" name="data">
-                        <input type="hidden" name="event_id" value="{{ $event->id }}">
+                        <input type="hidden" name="event_id" value="{{ $event_id }}">
                         <input type="hidden" name="type_of_payment" value="furnishing">
                         <button type="submit" class="btn btn-lg btn-block btn-success"><i class="fab fa-paypal"></i>
                             {{ trans('generals.paypal_payment_btn') }}</button>
