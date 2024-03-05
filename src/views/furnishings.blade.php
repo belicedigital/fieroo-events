@@ -10,7 +10,7 @@
             <br>
             <strong>{{ trans('generals.total_tax') }}</strong>: <span data-total-tax></span>€
         </p>
-        <button type="button" class="btn btn-success text-uppercase" data-toggle="modal" data-target="#modalPayment" disabled>
+        <button type="button" class="btn btn-success text-uppercase" data-toggle="modal" data-target="#modalPayment">
             <i class="fab fa-paypal"></i> {{ trans('generals.proceed_order') }}
         </button>
     </div>
@@ -359,18 +359,9 @@
             return obj
         }
 
-        // const initPayPal = () => {
-        //     $('input[name="data"]').val(JSON.stringify(formatData()))
-        //     if ($('input[name="data"]').val().length > 0) {
-        //         $('#paypalPayment').trigger('submit')
-        //     }
-        //     $('#modalPayment').hide()
-        // }
-
         $(document).ready(function() {
             // $('#modalPayment').on('show.bs.modal', function() {
             //     // initStripe()
-            //     initPayPal()
             // })
 
             $('#paypalPayment button').on('click', function(e) {
@@ -382,12 +373,6 @@
             })
 
             initSubTotal()
-
-            $('input[name="data"]').on('change', function() {
-                if ($('input[name="data"]').val().length > 0) {
-                    $('button[data-target="#modalPayment"]').removeAttr('disabled');
-                }
-            })
 
             $('select[name="variant"]').on('change', function() {
                 let $this = $(this)
