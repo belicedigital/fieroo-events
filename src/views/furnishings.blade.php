@@ -11,7 +11,7 @@
             <strong>{{ trans('generals.total_tax') }}</strong>: <span data-total-tax></span>€
         </p>
         <button type="button" class="btn btn-success text-uppercase" data-toggle="modal" data-target="#modalPayment">
-            <i class="fab fa-cc-stripe"></i> {{ trans('generals.proceed_order') }}
+            <i class="fab fa-paypal"></i> {{ trans('generals.proceed_order') }}
         </button>
     </div>
 @endsection
@@ -164,7 +164,7 @@
                                 class="fab fa-cc-stripe"></i>
                             {{ trans('generals.stripe_payment_btn') }}</button>
                     </form> --}}
-                    <form class="d-flex py-5 justify-content-center align-items-center"
+                    <form id="paypalPayment" class="d-flex py-5 justify-content-center align-items-center"
                         action="{{ route('spayment-furnishings') }}" method="POST">
                         @csrf
                         <input type="hidden" name="stand_type_id" value="{{ $stand_type_id }}">
@@ -180,51 +180,51 @@
     </div>
 @endsection
 @section('scripts')
-    <script src="https://js.stripe.com/v3/"></script>
+    {{-- <script src="https://js.stripe.com/v3/"></script> --}}
     <script>
-        const initStripe = () => {
-            const stripe = Stripe("{{ env('STRIPE_KEY') }}");
+        // const initStripe = () => {
+        //     const stripe = Stripe("{{ env('STRIPE_KEY') }}");
 
-            const elements = stripe.elements();
-            const cardElement = elements.create('card');
+        //     const elements = stripe.elements();
+        //     const cardElement = elements.create('card');
 
-            cardElement.mount('#card-element');
+        //     cardElement.mount('#card-element');
 
-            const cardHolderName = document.getElementById('card-holder-name');
-            const cardButton = document.getElementById('card-button');
+        //     const cardHolderName = document.getElementById('card-holder-name');
+        //     const cardButton = document.getElementById('card-button');
 
-            cardButton.addEventListener('click', async (e) => {
-                e.preventDefault()
-                const {
-                    paymentMethod,
-                    error
-                } = await stripe.createPaymentMethod(
-                    'card', cardElement, {
-                        billing_details: {
-                            name: cardHolderName.value
-                        }
-                    }
-                );
+        //     cardButton.addEventListener('click', async (e) => {
+        //         e.preventDefault()
+        //         const {
+        //             paymentMethod,
+        //             error
+        //         } = await stripe.createPaymentMethod(
+        //             'card', cardElement, {
+        //                 billing_details: {
+        //                     name: cardHolderName.value
+        //                 }
+        //             }
+        //         );
 
-                if (error) {
-                    toastr.error(error.message)
-                } else {
-                    Swal.fire({
-                        icon: 'success',
-                        title: "{{ trans('generals.stripe_card_verified') }}",
-                        confirmButtonText: "{{ trans('generals.stripe_confirm_payment') }}",
-                        allowOutsideClick: false,
-                    }).then(() => {
-                        $('input[name="data"]').val(JSON.stringify(formatData()))
-                        if ($('input[name="data"]').val().length > 0) {
-                            $('#paymentMethodId').val(paymentMethod.id)
-                            $('#stripePayment').trigger('submit')
-                        }
-                        $('#modalPayment').hide()
-                    })
-                }
-            });
-        }
+        //         if (error) {
+        //             toastr.error(error.message)
+        //         } else {
+        //             Swal.fire({
+        //                 icon: 'success',
+        //                 title: "{{ trans('generals.stripe_card_verified') }}",
+        //                 confirmButtonText: "{{ trans('generals.stripe_confirm_payment') }}",
+        //                 allowOutsideClick: false,
+        //             }).then(() => {
+        //                 $('input[name="data"]').val(JSON.stringify(formatData()))
+        //                 if ($('input[name="data"]').val().length > 0) {
+        //                     $('#paymentMethodId').val(paymentMethod.id)
+        //                     $('#stripePayment').trigger('submit')
+        //                 }
+        //                 $('#modalPayment').hide()
+        //             })
+        //         }
+        //     });
+        // }
         const assignImg = (el) => {
             let src = $(el).find('img').attr('src')
             $('#modalImg').find('img').attr('src', src)
@@ -359,10 +359,19 @@
             return obj
         }
 
+        const initPayPal = () => {
+            $('input[name="data"]').val(JSON.stringify(formatData()))
+            if ($('input[name="data"]').val().length > 0) {
+                $('#paypalPayment').trigger('submit')
+            }
+            $('#modalPayment').hide()
+        }
+
         $(document).ready(function() {
-            // $('#modalPayment').on('show.bs.modal', function() {
-            //     initStripe()
-            // })
+            $('#modalPayment').on('show.bs.modal', function() {
+                // initStripe()
+                initPayPal()
+            })
 
             initSubTotal()
 
