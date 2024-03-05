@@ -343,9 +343,9 @@
             $('[data-total]').text(getTotalOfPartials())
             $('[data-total-tax]').text(getTotalWithTax())
 
-            if (getTotalWithTax() !== 0) {
-                $('#paypalPayment button').removeAttr('disabled');
-            }
+            // if (getTotalWithTax() !== 0) {
+            //     $('#paypalPayment button').removeAttr('disabled');
+            // }
         }
 
         const formatData = () => {
