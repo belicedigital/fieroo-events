@@ -377,7 +377,7 @@
                 e.preventDefault();
                 $('input[name="data"]').val(JSON.stringify(formatData()))
                 if ($('input[name="data"]').val().length > 0) {
-                    $('#paypalPayment').submit()
+                    $('#paypalPayment').trigger('submit')
                 }
             })
 
