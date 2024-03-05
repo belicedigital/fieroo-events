@@ -359,18 +359,26 @@
             return obj
         }
 
-        const initPayPal = () => {
-            $('input[name="data"]').val(JSON.stringify(formatData()))
-            if ($('input[name="data"]').val().length > 0) {
-                $('#paypalPayment').trigger('submit')
-            }
-            $('#modalPayment').hide()
-        }
+        // const initPayPal = () => {
+        //     $('input[name="data"]').val(JSON.stringify(formatData()))
+        //     if ($('input[name="data"]').val().length > 0) {
+        //         $('#paypalPayment').trigger('submit')
+        //     }
+        //     $('#modalPayment').hide()
+        // }
 
         $(document).ready(function() {
-            $('#modalPayment').on('show.bs.modal', function() {
-                // initStripe()
-                initPayPal()
+            // $('#modalPayment').on('show.bs.modal', function() {
+            //     // initStripe()
+            //     initPayPal()
+            // })
+
+            $('#paypalPayment button').on('click', function(e) {
+                e.preventDefault();
+                $('input[name="data"]').val(JSON.stringify(formatData()))
+                if ($('input[name="data"]').val().length > 0) {
+                    $('#paypalPayment').submit()
+                }
             })
 
             initSubTotal()
