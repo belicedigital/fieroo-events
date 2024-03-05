@@ -341,6 +341,11 @@
 
             $('[data-total]').text(getTotalOfPartials())
             $('[data-total-tax]').text(getTotalWithTax())
+
+            $('#paypalPayment button').attr('disabled');
+            if (getTotalWithTax() !== 0) {
+                $('#paypalPayment button').removeAttr('disabled');
+            }
         }
 
         const formatData = () => {
