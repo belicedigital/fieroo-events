@@ -15,17 +15,40 @@
         <div class="row">
             <div class="col-12">
                 <div class="callout callout-info">
-                    <p class="m-0"><strong>{{ trans('generals.stand_price') }}</strong> {{ $amount }} €</p>
+                    @php
+                        $amount_no_tax = $amount / (1 + $iva / 100);
+                        $amount_with_tax = $amount;
+                        $tax_amount = $amount_with_tax - $amount_no_tax;
+                    @endphp
+                    <p class="m-0"><strong>{{ trans('generals.stand_price') }}</strong> {{ $amount_no_tax }}
+                        €
+                    </p>
+                    {{-- <p class="m-0"><strong>{{ trans('generals.stand_price') }}</strong> {{ $amount }} €</p> --}}
                     <p class="m-0"><strong>{{ trans('generals.n_modules') }}</strong> {{ $n_modules }}</p>
-                @if ($extra > 0)
+                    @if ($extra > 0)
+                        @php
+                            $extra_no_tax = $extra / (1 + $iva / 100);
+                            $extra_with_tax = $extra;
+                            $tax_extra = $extra_with_tax - $extra_no_tax;
+                        @endphp
+                        {{-- <p class="m-0"><strong>{{ trans('generals.furnishing_not_supplied_price') }}</strong>
+                            {{ $extra }} €</p> --}}
                         <p class="m-0"><strong>{{ trans('generals.furnishing_not_supplied_price') }}</strong>
-                            {{ $extra }} €</p>
-                        <p class="m-0"><strong>{{ trans('generals.tax') }} ({{ $iva }}%)</strong> {{ ($amount + $extra) * $iva / 100 }} €</p>
-                        <p class="m-0"><strong>{{ trans('generals.total_tax') }}</strong> {{ $amount + $extra + (($amount + $extra) * ($iva / 100)) }} €</p>
-                @else
-                        <p class="m-0"><strong>{{ trans('generals.tax') }} ({{ $iva }}%)</strong> {{ $amount * $iva / 100 }} €</p>
-                        <p class="m-0"><strong>{{ trans('generals.total_tax') }}</strong> {{ $amount + ($amount * $iva / 100) }} €</p>
-                @endif
+                            {{ $extra_no_tax }} €</p>
+                        {{-- <p class="m-0"><strong>{{ trans('generals.tax') }} ({{ $iva }}%)</strong>
+                            {{ (($amount + $extra) * $iva) / 100 }} €</p> --}}
+                        <p class="m-0"><strong>{{ trans('generals.tax') }} ({{ $iva }}%)</strong>
+                            {{ $tax_amount + $tax_extra }} €</p>
+                        {{-- <p class="m-0"><strong>{{ trans('generals.total_tax') }}</strong>
+                            {{ $amount + $extra + ($amount + $extra) * ($iva / 100) }} €</p> --}}
+                        <p class="m-0"><strong>{{ trans('generals.total_tax') }}</strong>
+                            {{ $amount_with_tax + $extra_with_tax }} €</p>
+                    @else
+                        <p class="m-0"><strong>{{ trans('generals.tax') }} ({{ $iva }}%)</strong>
+                            {{ $tax_amount }} €</p>
+                        <p class="m-0"><strong>{{ trans('generals.total_tax') }}</strong> {{ $amount_with_tax }} €</p>
+                        {{-- <p class="m-0"><strong>{{ trans('generals.total_tax') }}</strong> {{ $amount + ($amount * $iva / 100) }} €</p> --}}
+                    @endif
                 </div>
             </div>
         </div>
