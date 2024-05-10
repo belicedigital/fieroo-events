@@ -5,7 +5,7 @@ namespace Fieroo\Events\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Fieroo\Stands\Models\StandsType;
-use Event;
+use Fieroo\Events\Models\Event;
 
 class EventStand extends Model
 {

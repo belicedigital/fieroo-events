@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Fieroo\Payment\Models\Payment;
 use Fieroo\Bootstrapper\Models\User;
-use EventStand;
+use Fieroo\Events\Models\EventStand;
 
 class Event extends Model
 {
