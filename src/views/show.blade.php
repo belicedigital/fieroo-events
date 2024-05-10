@@ -176,7 +176,8 @@
         }
 
         const getStands = () => {
-            let base_url = '/admin/stands/getSelectList'
+            let event_id = {{ $event->id }}
+            let base_url = '/admin/events/' + event_id + '/stands/getSelectList'
             common_request.post(base_url)
                 .then(response => {
                     let data = response.data

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Fieroo\Payment\Models\Payment;
 use Fieroo\Bootstrapper\Models\User;
+use EventStand;
 
 class Event extends Model
 {
@@ -22,5 +23,10 @@ class Event extends Model
     public function subscriptions()
     {
         return $this->hasMany(Payment::class);
+    }
+
+    public function stands()
+    {
+        return $this->hasMany(EventStand::class);
     }
 }

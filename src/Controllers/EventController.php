@@ -9,6 +9,7 @@ use Fieroo\Events\Models\Event;
 use Fieroo\Payment\Models\Payment;
 use Fieroo\Exhibitors\Models\Exhibitor;
 use Fieroo\Stands\Models\StandsTypeTranslation;
+use Fieroo\Events\Models\EventStand;
 use Fieroo\Furnitures\Models\Furnishing;
 use Fieroo\Payment\Models\Order;
 use Fieroo\Bootstrapper\Models\Setting;
@@ -51,6 +52,7 @@ class EventController extends Controller
     public function store(Request $request)
     {
         $validation_data = [
+            'stand_type_id' => ['required', 'array'],
             'title' => ['required', 'string', 'max:255'],
             'start' => ['required', 'date_format:Y-m-d', 'before_or_equal:end'],
             'end' => ['required', 'date_format:Y-m-d', 'after_or_equal:start'],
@@ -86,6 +88,13 @@ class EventController extends Controller
                 'subscription_date_open_until' => Carbon::parse($request->subscription_date_open_until)->format('Y-m-d'),
                 'is_published' => $request->is_published ? true : false,
             ]);
+
+            foreach($request->stand_type_id as $index => $stand_type_id) {
+                EventStand::create([
+                    'stand_type_id' => $stand_type_id,
+                    'event_id' => $event->id,
+                ]);
+            }
 
             $entity_name = trans('entities.event');
             return redirect('admin/events')->with('success', trans('forms.created_success',['obj' => $entity_name]));
@@ -292,5 +301,27 @@ class EventController extends Controller
         Event::findOrFail($id)->delete();
         $entity_name = trans('entities.event');
         return redirect('admin/events')->with('success', trans('forms.deleted_success',['obj' => $entity_name]));
+    }
+
+    public function getStandSelectList($event_id)
+    {
+        $response = [
+            'status' => false
+        ];
+
+        try {
+            $event = Event::findOrFail($event_id);
+
+            $query = StandsTypeTranslation::where('locale','=',auth()->user()->exhibitor->locale);
+            if($event->stands()->count() > 0) {
+                $query = $query->whereIn('stand_type_id', $event->stands->pluck('stand_type_id'));
+            }
+            $response['status'] = true;
+            $response['data'] = $query->get();
+            return response()->json($response);
+        } catch(\Exception $e){
+            $response['message'] = $e->getMessage();
+            return response()->json($response);
+        }
     }
 }
