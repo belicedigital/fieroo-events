@@ -13,6 +13,8 @@ class EventStand extends Model
 
     public $table = 'events_stands';
 
+    public $timestamps = false;
+
     protected $fillable = [
         'event_id',
         'stand_type_id',
