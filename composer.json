@@ -3,6 +3,9 @@
     "description": "Fieroo Events",
     "type": "library",
     "license": "EULA",
+    "require": {
+        "spatie/simple-excel": "^3.0"
+    },
     "autoload": {
         "psr-4": {
             "Fieroo\\Events\\": "src/"

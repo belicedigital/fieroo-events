@@ -13,11 +13,13 @@ use Fieroo\Events\Models\EventStand;
 use Fieroo\Furnitures\Models\Furnishing;
 use Fieroo\Payment\Models\Order;
 use Fieroo\Bootstrapper\Models\Setting;
+use Spatie\SimpleExcel\SimpleExcelWriter;
 use Carbon\Carbon;
 use Validator;
 use DB;
 use \stdClass;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 class EventController extends Controller
 {
@@ -287,7 +289,7 @@ class EventController extends Controller
             ['event_id', '=', $event_id],
             ['type_of_payment', '=', 'subscription'],
         ])->get();
-        return view('events::subscriptions', ['list' => $subscriptions, 'event_title' => $event->title]);
+        return view('events::subscriptions', ['id' => $event_id, 'list' => $subscriptions, 'event_title' => $event->title]);
     }
 
     /**
@@ -323,5 +325,114 @@ class EventController extends Controller
             $response['message'] = $e->getMessage();
             return response()->json($response);
         }
+    }
+
+    public function exportEventsExhibitors()
+    {
+        $list = DB::table('payments')
+            ->leftJoin('users', 'payments.user_id', '=', 'users.id')
+            ->leftJoin('events', 'payments.event_id', '=', 'events.id')
+            ->leftJoin('exhibitors_data', 'users.email', 'exhibitors_data.email_responsible')
+            ->where('payments.type_of_payment', '=', 'subscription')
+            ->select(
+                'events.title',
+                'events.start',
+                'events.end',
+                'users.email',
+                'exhibitors_data.*', 
+            )
+            ->get();
+            
+        $to_export = [];
+        foreach($list as $l) {
+            $item = [
+                'evento' => $l->title,
+                'data inizio evento' => $l->start,
+                'data fine evento' => $l->end,
+                'nome o ragione sociale' => $l->company,
+                'indirizzo' => $l->address,
+                'civico' => $l->civic_number,
+                'città' => $l->city,
+                'cap' => $l->cap,
+                'provincia' => $l->province,
+                'telefono' => $l->phone,
+                'sito web' => $l->web,
+                'responsabile' => $l->responsible,
+                'e-mail' => $l->email,
+                'telefono responsabile' => $l->phone_responsible,
+                'codice fiscale' => $l->fiscal_code,
+                'partita iva' => $l->vat_number,
+                'codice univoco' => $l->uni_code,
+                'dati fatturazione diversi' => $l->diff_billing ? 'si' : 'no',
+                'indirizzo fatturazione' => $l->receiver_address,
+                'civico fatturazione' => $l->receiver_civic_number,
+                'città fatturazione' => $l->receiver_city,
+                'cap fatturazione' => $l->receiver_cap,
+                'provincia fatturazione' => $l->receiver_province,
+                'codice fiscale fatturazione' => $l->receiver_fiscal_code,
+                'partita iva fatturazione' => $l->receiver_vat_number,
+                'codice univoco fatturazione' => $l->receiver_uni_code,
+            ];
+            array_push($to_export, $item);
+        }
+
+        $csv = SimpleExcelWriter::streamDownload('Eventi_Espositori.csv')
+            ->addHeader(array_keys($to_export[0]))
+            ->addRows($to_export);
+
+        return $csv->toBrowser();
+    }
+
+    public function exportEventExhibitors($event_id)
+    {
+        $list = DB::table('payments')
+            ->leftJoin('users', 'payments.user_id', '=', 'users.id')
+            ->leftJoin('exhibitors_data', 'users.email', 'exhibitors_data.email_responsible')
+            ->where([
+                ['payments.type_of_payment', '=', 'subscription'],
+                ['payments.event_id', '=', $event_id],
+            ])
+            ->select(
+                'users.email',
+                'exhibitors_data.*', 
+            )
+            ->get();
+            
+        $to_export = [];
+        foreach($list as $l) {
+            $item = [
+                'nome o ragione sociale' => $l->company,
+                'indirizzo' => $l->address,
+                'civico' => $l->civic_number,
+                'città' => $l->city,
+                'cap' => $l->cap,
+                'provincia' => $l->province,
+                'telefono' => $l->phone,
+                'sito web' => $l->web,
+                'responsabile' => $l->responsible,
+                'e-mail' => $l->email,
+                'telefono responsabile' => $l->phone_responsible,
+                'codice fiscale' => $l->fiscal_code,
+                'partita iva' => $l->vat_number,
+                'codice univoco' => $l->uni_code,
+                'dati fatturazione diversi' => $l->diff_billing ? 'si' : 'no',
+                'indirizzo fatturazione' => $l->receiver_address,
+                'civico fatturazione' => $l->receiver_civic_number,
+                'città fatturazione' => $l->receiver_city,
+                'cap fatturazione' => $l->receiver_cap,
+                'provincia fatturazione' => $l->receiver_province,
+                'codice fiscale fatturazione' => $l->receiver_fiscal_code,
+                'partita iva fatturazione' => $l->receiver_vat_number,
+                'codice univoco fatturazione' => $l->receiver_uni_code,
+            ];
+            array_push($to_export, $item);
+        }
+
+        $event = Event::find($event_id);
+        $csv = SimpleExcelWriter::streamDownload(Str::snake($event->title).'_Espositori.csv')
+            ->addHeader(array_keys($to_export[0]))
+            ->addRows($to_export);
+
+        return $csv->toBrowser();
     }
 }
