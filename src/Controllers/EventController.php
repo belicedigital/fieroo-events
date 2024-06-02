@@ -353,7 +353,7 @@ class EventController extends Controller
                 'indirizzo' => $l->address,
                 'civico' => $l->civic_number,
                 'città' => $l->city,
-                'cap' => $l->cap,
+                'cap' => (string) $l->cap,
                 'provincia' => $l->province,
                 'telefono' => $l->phone,
                 'sito web' => $l->web,
@@ -361,17 +361,17 @@ class EventController extends Controller
                 'e-mail' => $l->email,
                 'telefono responsabile' => $l->phone_responsible,
                 'codice fiscale' => $l->fiscal_code,
-                'partita iva' => $l->vat_number,
-                'codice univoco' => $l->uni_code,
+                'partita iva' => (string) $l->vat_number,
+                'codice univoco' => (string) $l->uni_code,
                 'dati fatturazione diversi' => $l->diff_billing ? 'si' : 'no',
                 'indirizzo fatturazione' => $l->receiver_address,
                 'civico fatturazione' => $l->receiver_civic_number,
                 'città fatturazione' => $l->receiver_city,
-                'cap fatturazione' => $l->receiver_cap,
+                'cap fatturazione' => (string) $l->receiver_cap,
                 'provincia fatturazione' => $l->receiver_province,
                 'codice fiscale fatturazione' => $l->receiver_fiscal_code,
-                'partita iva fatturazione' => $l->receiver_vat_number,
-                'codice univoco fatturazione' => $l->receiver_uni_code,
+                'partita iva fatturazione' => (string) $l->receiver_vat_number,
+                'codice univoco fatturazione' => (string) $l->receiver_uni_code,
             ];
             array_push($to_export, $item);
         }
@@ -388,13 +388,18 @@ class EventController extends Controller
         $list = DB::table('payments')
             ->leftJoin('users', 'payments.user_id', '=', 'users.id')
             ->leftJoin('exhibitors_data', 'users.email', 'exhibitors_data.email_responsible')
+            ->leftJoin('stands_types_translations', 'payments.stand_type_id', '=', 'stands_types_translations.stand_type_id')
             ->where([
                 ['payments.type_of_payment', '=', 'subscription'],
                 ['payments.event_id', '=', $event_id],
+                ['stands_types_translations.locale', '=', 'it'],
             ])
             ->select(
                 'users.email',
                 'exhibitors_data.*', 
+                'payments.amount',
+                'payments.n_modules',
+                'stands_types_translations.name as stand',
             )
             ->get();
             
@@ -405,7 +410,7 @@ class EventController extends Controller
                 'indirizzo' => $l->address,
                 'civico' => $l->civic_number,
                 'città' => $l->city,
-                'cap' => $l->cap,
+                'cap' => (string) $l->cap,
                 'provincia' => $l->province,
                 'telefono' => $l->phone,
                 'sito web' => $l->web,
@@ -413,17 +418,20 @@ class EventController extends Controller
                 'e-mail' => $l->email,
                 'telefono responsabile' => $l->phone_responsible,
                 'codice fiscale' => $l->fiscal_code,
-                'partita iva' => $l->vat_number,
-                'codice univoco' => $l->uni_code,
+                'partita iva' => (string) $l->vat_number,
+                'codice univoco' => (string) $l->uni_code,
                 'dati fatturazione diversi' => $l->diff_billing ? 'si' : 'no',
                 'indirizzo fatturazione' => $l->receiver_address,
                 'civico fatturazione' => $l->receiver_civic_number,
                 'città fatturazione' => $l->receiver_city,
-                'cap fatturazione' => $l->receiver_cap,
+                'cap fatturazione' => (string) $l->receiver_cap,
                 'provincia fatturazione' => $l->receiver_province,
                 'codice fiscale fatturazione' => $l->receiver_fiscal_code,
-                'partita iva fatturazione' => $l->receiver_vat_number,
-                'codice univoco fatturazione' => $l->receiver_uni_code,
+                'partita iva fatturazione' => (string) $l->receiver_vat_number,
+                'codice univoco fatturazione' => (string) $l->receiver_uni_code,
+                'importo' => $l->amount,
+                'stand' => $l->stand,
+                'n. moduli' => $l->n_modules,
             ];
             array_push($to_export, $item);
         }
