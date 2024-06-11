@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserCouponsTable extends Migration
+class CreateUserCouponsCustomTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateUserCouponsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_coupons', function (Blueprint $table) {
+        Schema::create('user_coupons_custom', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('coupon_id')->constrained()->onDelete('cascade');
@@ -28,6 +28,6 @@ class CreateUserCouponsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_coupons');
+        Schema::dropIfExists('user_coupons_custom');
     }
 }
