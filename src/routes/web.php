@@ -1,4 +1,6 @@
 <?php
+
+use Fieroo\Events\Controllers\CouponController;
 use Illuminate\Support\Facades\Route;
 use Fieroo\Events\Controllers\EventController;
 
@@ -14,4 +16,5 @@ Route::group(['prefix' => 'admin', 'middleware' => ['web','auth']], function() {
         Route::get('/events/exhibitors', [EventController::class, 'exportEventsExhibitors']);
         Route::get('/event/{id}/exhibitors', [EventController::class, 'exportEventExhibitors']);
     });
+    Route::resource('/coupons', CouponController::class);
 });
