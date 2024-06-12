@@ -11,6 +11,8 @@ class CouponUser extends Model
 {
     use HasFactory;
 
+    public $table = 'user_coupons';
+
     protected $fillable = [
         'user_id',
         'coupon_id',
