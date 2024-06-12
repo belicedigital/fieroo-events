@@ -138,7 +138,7 @@ class CouponController extends Controller
         try {
             $coupon = Coupon::findOrFail($id);
             $coupon->code = $request->code;
-            $coupon->percentage = $request->perccentage;
+            $coupon->percentage = $request->percentage;
             $coupon->is_active = $request->is_active ? true : false;
             $coupon->save();
 
