@@ -21,14 +21,24 @@
                                     <div class="form-group">
                                         <strong>{{ trans('forms.code') }}</strong>
                                         <input type="text" name="code" class="form-control"
-                                            value="{{ old('code') }}">
+                                            value="{{ old('code') }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                    <div class="form-group">
+                                        <strong>{{ trans('tables.percentage') }}</strong>
+                                        <input type="text" name="percentage" class="form-control"
+                                            value="{{ old('percentage') }}" required>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12">
                                     <div class="form-group">
                                         <strong>{{ trans('tables.exhibitor') }}</strong>
                                         <select id="user_id" name="user_id" class="form-control">
-                                            <option value="" disabled>{{ trans('forms.select_choice') }}</option>
+                                            <option value="">{{ trans('forms.select_choice') }}</option>
+                                            @foreach ($users as $user)
+                                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -50,32 +60,4 @@
             </div>
         </div>
     </div>
-@endsection
-@section('scripts')
-    <script>
-        const initStands = () => {
-            common_request.post('/admin/furnishings/stands')
-                .then(response => {
-                    let data = response.data
-                    if (data.status) {
-                        $.each(data.data, function(index, value) {
-                            let opt = document.createElement('option')
-                            opt.text = value.name + ' (' + value.size + ' {{ trans('generals.mq') }})';
-                            opt.value = value.stand_type_id;
-                            $('#stand_type_id').append(opt)
-                        })
-                        $('#stand_type_id').select2();
-                    } else {
-                        toastr.error(data.message)
-                    }
-                })
-                .catch(error => {
-                    toastr.error(error)
-                    console.log(error)
-                })
-        }
-        $(document).ready(function() {
-            initStands()
-        });
-    </script>
 @endsection

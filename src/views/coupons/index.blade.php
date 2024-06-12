@@ -17,22 +17,20 @@
                         <table class="table table-hover text-nowrap">
                             <thead>
                                 <tr>
-                                    <th>{{ trans('tables.id') }}</th>
                                     <th>{{ trans('tables.code') }}</th>
+                                    <th>{{ trans('entities.exhibitor') }}</th>
                                     <th>{{ trans('tables.percentage') }}</th>
                                     <th>{{ trans('tables.is_active') }}</th>
-                                    <th>{{ trans('tables.user_id') }}</th>
                                     <th class="no-sort">{{ trans('tables.actions') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($list as $l)
                                     <tr>
-                                        <td>{{ $l->id }}</td>
                                         <td>{{ $l->code }}</td>
+                                        <td>{{ $l->user_id }}</td>
                                         <td>{{ $l->percentage }}</td>
                                         <td>{{ $l->is_active ? trans('generals.yes') : trans('generals.no') }}</td>
-                                        <td>{{ $l->user_id }}</td>
                                         <td>
                                             <div class="btn-group btn-group" role="group">
                                                 <a data-toggle="tooltip" data-placement="top"

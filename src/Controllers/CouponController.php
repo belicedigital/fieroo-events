@@ -5,6 +5,7 @@ namespace Fieroo\Events\Controllers;
 use Fieroo\Events\Models\Coupon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Fieroo\Bootstrapper\Models\User;
 use Validator;
 use DB;
 
@@ -19,7 +20,7 @@ class CouponController extends Controller
     public function index()
     {
         $list = Coupon::all();
-        return view('events::coupons.index', ['list' => $list]);
+        return view('coupons::index', ['list' => $list]);
     }
 
     /**
@@ -29,7 +30,10 @@ class CouponController extends Controller
      */
     public function create()
     {
-        return view('events::coupons.create');
+        $users = User::whereHas('roles', function($q) {
+            $q->where('name', 'espositore');
+        });
+        return view('coupons::create', ['users' => $users]);
     }
 
     /**
@@ -41,8 +45,9 @@ class CouponController extends Controller
     public function store(Request $request)
     {
         $validation_data = [
-            'code' => ['required', 'array'],
-            'percentage' => ['required'],
+            'code' => ['required', 'string', 'max:255'],
+            'percentage' => ['required', 'integer'],
+            'is_active' => ['boolean'],
         ];
 
         $validator = Validator::make($request->all(), $validation_data);
@@ -58,9 +63,14 @@ class CouponController extends Controller
             $coupon = Coupon::create([
                 'codice' => $request->codice,
                 'percentage' => $request->percentage,
-                'user_id' => $request->user_id,
                 'is_active' => $request->is_active ? true : false,
             ]);
+
+            if(strlen($request->user_id) > 0) {
+                $coupon->user()->create([
+                    'user_id' => $request->user_id
+                ]);
+            }
 
             $entity_name = trans('entities.coupon');
             return redirect('admin/coupons')->with('success', trans('forms.created_success',['obj' => $entity_name]));
@@ -82,7 +92,7 @@ class CouponController extends Controller
     public function show($id)
     {
         $coupon = Coupon::findOrFail($id);
-        return view('events::coupons.show', ['coupon' => $coupon]);
+        return view('coupons::show', ['coupon' => $coupon]);
     }
 
     /**
@@ -94,7 +104,10 @@ class CouponController extends Controller
     public function edit($id)
     {
         $coupon = Coupon::findOrFail($id);
-        return view('events::coupons.edit', ['coupon' => $coupon]);
+        $users = User::whereHas('roles', function($q) {
+            $q->where('name', 'espositore');
+        });
+        return view('coupons::edit', ['coupon' => $coupon, 'users' => $users]);
     }
 
     /**
@@ -108,7 +121,8 @@ class CouponController extends Controller
     {
         $validation_data = [
             'code' => ['required', 'string', 'max:255'],
-            'percentage' => ['required'],
+            'percentage' => ['required', 'integer'],
+            'is_active' => ['boolean'],
         ];
 
         $validator = Validator::make($request->all(), $validation_data);
@@ -124,9 +138,18 @@ class CouponController extends Controller
             $coupon = Coupon::findOrFail($id);
             $coupon->code = $request->code;
             $coupon->percentage = $request->perccentage;
-            $coupon->user_id = $request->user_id;
             $coupon->is_active = $request->is_active ? true : false;
             $coupon->save();
+
+            if(strlen($request->user_id) > 0) {
+                if($coupon->user()->where('user_id', $request->user_id)->count() <= 0) {
+                    $coupon->user()->create([
+                        'user_id' => $request->user_id
+                    ]);
+                } else {
+                    $coupon->user()->update(['user_id' => $request->user_id]);
+                }
+            }
 
             $entity_name = trans('entities.coupon');
             return redirect('admin/coupons')->with('success', trans('forms.updated_success',['obj' => $entity_name]));

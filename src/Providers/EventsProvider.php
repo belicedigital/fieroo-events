@@ -15,7 +15,8 @@ class EventsProvider extends ServiceProvider
     {
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
 
-        $this->loadViewsFrom(__DIR__.'/../views', 'events');
+        $this->loadViewsFrom(__DIR__.'/../views/events', 'events');
+        $this->loadViewsFrom(__DIR__.'/../views/coupons', 'coupons');
 
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         

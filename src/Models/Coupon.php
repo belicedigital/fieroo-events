@@ -4,7 +4,7 @@ namespace Fieroo\Events\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Fieroo\Bootstrapper\Models\User;
+use Fieroo\Events\Models\CouponUser;
 
 class Coupon extends Model
 {
@@ -13,12 +13,17 @@ class Coupon extends Model
     protected $fillable = [
         'code',
         'percentage',
-        'user_id',
-        'is_active'
+        'is_active',
     ];
 
-    public function users()
+    protected $casts = [
+        'code' => 'string',
+        'percentage' => 'integer',
+        'is_active' => 'boolean',
+    ];
+
+    public function user()
     {
-        return $this->hasMany(User::class);
+        return $this->hasOne(CouponUser::class);
     }
 }
