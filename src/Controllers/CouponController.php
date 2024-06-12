@@ -150,6 +150,10 @@ class CouponController extends Controller
                 } else {
                     $coupon->user()->update(['user_id' => $request->user_id]);
                 }
+            } else {
+                if($coupon->user()->count() > 0) {
+                    $coupon->user()->delete();
+                }
             }
 
             $entity_name = trans('entities.coupon');
