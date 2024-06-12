@@ -62,7 +62,7 @@ class CouponController extends Controller
 
         try {
             $coupon = Coupon::create([
-                'codice' => $request->codice,
+                'code' => $request->code,
                 'percentage' => $request->percentage,
                 'is_active' => $request->is_active ? true : false,
             ]);
