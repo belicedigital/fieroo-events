@@ -6,6 +6,7 @@ use Fieroo\Events\Models\Coupon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Fieroo\Bootstrapper\Models\User;
+use Fieroo\Exhibitors\Models\Exhibitor;
 use Validator;
 use DB;
 
@@ -30,9 +31,10 @@ class CouponController extends Controller
      */
     public function create()
     {
-        $users = User::whereHas('roles', function($q) {
-            $q->where('name', 'espositore');
-        });
+        // $users = User::whereHas('roles', function($q) {
+        //     $q->where('name', 'espositore');
+        // });
+        $users = Exhibitor::all();
         return view('coupons::create', ['users' => $users]);
     }
 
@@ -104,9 +106,10 @@ class CouponController extends Controller
     public function edit($id)
     {
         $coupon = Coupon::findOrFail($id);
-        $users = User::whereHas('roles', function($q) {
-            $q->where('name', 'espositore');
-        });
+        // $users = User::whereHas('roles', function($q) {
+        //     $q->where('name', 'espositore');
+        // });
+        $users = Exhibitor::all();
         return view('coupons::edit', ['coupon' => $coupon, 'users' => $users]);
     }
 

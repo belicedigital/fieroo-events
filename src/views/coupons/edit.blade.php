@@ -20,7 +20,7 @@
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12">
                                     <div class="form-group">
-                                        <strong>{{ trans('forms.code') }}</strong>
+                                        <strong>{{ trans('tables.code') }}</strong>
                                         <input type="text" name="code" class="form-control"
                                             value="{{ $coupon->code }}" required>
                                     </div>
@@ -34,13 +34,13 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12">
                                     <div class="form-group">
-                                        <strong>{{ trans('tables.exhibitor') }}</strong>
+                                        <strong>{{ trans('entities.exhibitor') }}</strong>
                                         <select id="user_id" name="user_id" class="form-control">
                                             <option value="">{{ trans('forms.select_choice') }}</option>
                                             @foreach ($users as $user)
                                                 <option value="{{ $user->id }}"
-                                                    {{ $user->id == $coupon->user->user_id ? 'selected' : '' }}>
-                                                    {{ $user->name }}</option>
+                                                    {{ $user->user_id == $coupon->user->user_id ? 'selected' : '' }}>
+                                                    {{ $user->user->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
