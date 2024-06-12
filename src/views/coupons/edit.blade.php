@@ -39,7 +39,7 @@
                                             <option value="">{{ trans('forms.select_choice') }}</option>
                                             @foreach ($users as $user)
                                                 <option value="{{ $user->id }}"
-                                                    {{ $user->user_id == $coupon->user->user_id ? 'selected' : '' }}>
+                                                    {{ $coupon->user && $user->user_id == $coupon->user->user_id ? 'selected' : '' }}>
                                                     {{ $user->user->name }}</option>
                                             @endforeach
                                         </select>

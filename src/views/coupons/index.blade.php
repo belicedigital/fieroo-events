@@ -28,7 +28,7 @@
                                 @foreach ($list as $l)
                                     <tr>
                                         <td>{{ $l->code }}</td>
-                                        <td>{{ $l->user_id }}</td>
+                                        <td>{{ $l->user ? $l->user->user->email : 'N/A' }}</td>
                                         <td>{{ $l->percentage }}</td>
                                         <td>{{ $l->is_active ? trans('generals.yes') : trans('generals.no') }}</td>
                                         <td>
