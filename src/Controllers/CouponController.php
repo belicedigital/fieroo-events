@@ -19,7 +19,7 @@ class CouponController extends Controller
     public function index()
     {
         $list = Coupon::all();
-        return view('events::coupons::index', ['list' => $list]);
+        return view('events::coupons.index', ['list' => $list]);
     }
 
     /**
@@ -29,7 +29,7 @@ class CouponController extends Controller
      */
     public function create()
     {
-        return view('events::coupons::create');
+        return view('events::coupons.create');
     }
 
     /**
@@ -82,7 +82,7 @@ class CouponController extends Controller
     public function show($id)
     {
         $coupon = Coupon::findOrFail($id);
-        return view('events::coupons::show', ['coupon' => $coupon]);
+        return view('events::coupons.show', ['coupon' => $coupon]);
     }
 
     /**
@@ -94,7 +94,7 @@ class CouponController extends Controller
     public function edit($id)
     {
         $coupon = Coupon::findOrFail($id);
-        return view('events::coupons::edit', ['coupon' => $coupon]);
+        return view('events::coupons.edit', ['coupon' => $coupon]);
     }
 
     /**
