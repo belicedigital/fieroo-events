@@ -49,7 +49,6 @@ class CouponController extends Controller
         $validation_data = [
             'code' => ['required', 'string', 'max:255'],
             'percentage' => ['required', 'integer'],
-            'is_active' => ['boolean'],
         ];
 
         $validator = Validator::make($request->all(), $validation_data);
@@ -125,7 +124,6 @@ class CouponController extends Controller
         $validation_data = [
             'code' => ['required', 'string', 'max:255'],
             'percentage' => ['required', 'integer'],
-            'is_active' => ['boolean'],
         ];
 
         $validator = Validator::make($request->all(), $validation_data);
