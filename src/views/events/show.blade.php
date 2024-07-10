@@ -301,12 +301,8 @@
 @section('current', trans('generals.event_subscription', ['event' => $event->title]))
 
 @section('button')
-    <a href="{{ url('admin/dashboard') }}" class="btn btn-secondary create-new btn-primary waves-effect waves-light"
-        data-toggle="tooltip" data-placement="bottom" title="{{ trans('generals.back') }}"><span><i
-                class="fas fa-chevron-left"></i>
-        </span></a>
-    {{-- <a href="{{ url('admin/dashboard') }}" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom"
-        title="{{ trans('generals.back') }}"><i class="fas fa-chevron-left"></i></a> --}}
+    <a href="{{ url('admin/dashboard') }}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="bottom"
+        data-bs-original-title="{{ trans('generals.back') }}"><i class="fas fa-chevron-left"></i></a>
 @endsection
 
 @section('content')

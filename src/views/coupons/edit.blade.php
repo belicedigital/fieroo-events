@@ -75,12 +75,8 @@
 @section('current', trans('crud.new', ['obj' => trans('entities.coupon')]))
 
 @section('button')
-    <a href="{{ url('admin/coupons') }}" class="btn btn-secondary create-new btn-primary waves-effect waves-light"
-        data-toggle="tooltip" data-placement="bottom" title="{{ trans('generals.back') }}"><span><i
-                class="fas fa-chevron-left"></i>
-        </span></a>
-    {{-- <a href="{{ url('admin/coupons') }}" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom"
-        title="{{ trans('generals.back') }}"><i class="fas fa-chevron-left"></i></a> --}}
+    <a href="{{ url('admin/coupons') }}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="bottom"
+        data-bs-original-title="{{ trans('generals.back') }}"><i class="fas fa-chevron-left"></i></a>
 @endsection
 
 @section('content')
@@ -130,8 +126,6 @@
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12 text-end">
                             <button type="submit" class="btn btn-primary">{{ trans('generals.save') }}</button>
-                            {{-- <a href="{{ url('admin/coupons') }}"
-                                class="btn btn-label-secondary">{{ trans('generals.cancel') }}</a> --}}
                         </div>
                     </form>
                 </div>

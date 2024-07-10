@@ -106,14 +106,8 @@
 @section('title_header', trans('entities.coupons'))
 
 @section('button')
-    <a href="{{ url('admin/coupons/create') }}" class="btn btn-secondary create-new btn-primary waves-effect waves-light"
-        data-toggle="tooltip" data-placement="bottom" title="{{ trans('generals.add') }}"><span><i
-                class="ti ti-plus me-sm-1"></i>
-        </span></a>
-    {{-- <a href="{{ url('admin/coupons/create') }}" class="btn btn-secondary create-new btn-primary waves-effect waves-light"
-        data-toggle="tooltip" data-placement="bottom"><span><i class="ti ti-plus me-sm-1"></i>
-            <span class="d-none d-sm-inline-block">{{ trans('generals.add') }}</span>
-        </span></a> --}}
+    <a href="{{ url('admin/coupons/create') }}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="bottom"
+        data-bs-original-title="{{ trans('generals.add') }}"><i class="ti ti-plus me-sm-1"></i></a>
 @endsection
 
 @section('path', trans('entities.coupons'))
