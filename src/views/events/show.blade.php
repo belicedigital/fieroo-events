@@ -451,6 +451,7 @@
 @endsection
 
 @section('page-script')
+    <script src="{{ asset('assets/js/text-editor.js') }}"></script>
     <script src="https://js.stripe.com/v3/"></script>
     <script>
         const initStripe = () => {
@@ -580,16 +581,16 @@
             $('#tot-tax').text((totalWithTax - totalWithoutTax).toFixed(2));
         };
         $(document).ready(function() {
-            function deltaToHtml(deltaOps) {
-                const container = document.createElement('div');
-                const quill = new Quill(container);
+            // function deltaToHtml(deltaOps) {
+            //     const container = document.createElement('div');
+            //     const quill = new Quill(container);
 
-                // Imposta il contenuto usando il delta
-                quill.setContents(deltaOps);
+            //     // Imposta il contenuto usando il delta
+            //     quill.setContents(deltaOps);
 
-                // Restituisce l'HTML
-                return container.querySelector('.ql-editor').innerHTML;
-            }
+            //     // Restituisce l'HTML
+            //     return container.querySelector('.ql-editor').innerHTML;
+            // }
             //initStripe();
             getStands();
             $('select[name="stand_type"]').on('change', function(e) {
