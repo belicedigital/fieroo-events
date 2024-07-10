@@ -116,13 +116,28 @@
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <div class="form-group mb-3">
+                                    <label class="switch switch-primary switch-sm me-0">
+                                        <input class='switch-input'type="checkbox" id="is_active" name="is_active"
+                                            {{ $event->is_active ? 'checked' : '' }} data-toggle="toggle"
+                                            data-on="{{ trans('generals.yes') }}" data-off="{{ trans('generals.no') }}"
+                                            data-onstyle="success" data-offstyle="danger" data-size="sm">
+                                        <span class="switch-toggle-slider">
+                                            <span class="switch-on"></span>
+                                            <span class="switch-off"></span>
+                                        </span>
+                                        <span class="switch-label fs-6 fw-bolder">{{ trans('forms.publish') }}</span>
+                                    </label>
+                                </div>
+                            </div>
+                            {{-- <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="form-group mb-3">
                                     <div class="icheck-primary d-inline">
                                         <input type="checkbox" id="is_active" name="is_active"
                                             {{ $coupon->is_active ? 'checked' : '' }}>
                                         <label for="is_active">{{ trans('forms.publish') }}</label>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12 text-end">
                             <button type="submit" class="btn btn-primary">{{ trans('generals.save') }}</button>
