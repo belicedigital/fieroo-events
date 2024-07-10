@@ -111,9 +111,13 @@
 @section('path', trans('entities.events'))
 @section('current', trans('crud.new', ['obj' => trans('entities.event')]))
 
-@section('buttons')
-    <a href="{{ url('admin/events') }}" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom"
-        title="{{ trans('generals.back') }}"><i class="fas fa-chevron-left"></i></a>
+@section('button')
+    <a href="{{ url('admin/events') }}" class="btn btn-secondary create-new btn-primary waves-effect waves-light"
+        data-toggle="tooltip" data-placement="bottom" title="{{ trans('generals.back') }}"><span><i
+                class="fas fa-chevron-left"></i>
+        </span></a>
+    {{-- <a href="{{ url('admin/events') }}" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom"
+        title="{{ trans('generals.back') }}"><i class="fas fa-chevron-left"></i></a> --}}
 @endsection
 
 @section('content')
@@ -177,8 +181,8 @@
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12 text-end">
                             <button type="submit" class="btn btn-primary">{{ trans('generals.save') }}</button>
-                            <a href="{{ url('admin/events') }}"
-                                class="btn btn-label-secondary">{{ trans('generals.cancel') }}</a>
+                            {{-- <a href="{{ url('admin/events') }}"
+                                class="btn btn-label-secondary">{{ trans('generals.cancel') }}</a> --}}
                         </div>
                     </form>
                 </div>

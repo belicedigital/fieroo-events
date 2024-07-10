@@ -83,11 +83,19 @@
 @section('path', trans('entities.events'))
 @section('current', trans('entities.subscribed_exhibitors', ['event_title' => $event_title]))
 
-@section('buttons')
-    <a href="{{ url('admin/events') }}" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom"
+@section('button')
+    <a href="{{ url('admin/events') }}" class="btn btn-secondary create-new btn-primary waves-effect waves-light"
+        data-toggle="tooltip" data-placement="bottom" title="{{ trans('generals.back') }}"><span><i
+                class="fas fa-chevron-left"></i>
+        </span></a>
+    <a href="{{ url('admin/export/event/' . $id . '/exhibitors') }}"
+        class="btn btn-secondary create-new btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="bottom"
+        title="{{ trans('generals.export') }}"><span><i class="fas fa-file-export"></i>
+        </span></a>
+    {{-- <a href="{{ url('admin/events') }}" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom"
         title="{{ trans('generals.back') }}"><i class="fas fa-chevron-left"></i></a>
     <a href="{{ url('admin/export/event/' . $id . '/exhibitors') }}" class="btn btn-primary" data-toggle="tooltip"
-        data-placement="bottom" title="{{ trans('generals.export') }}"><i class="fas fa-file-export"></i></a>
+        data-placement="bottom" title="{{ trans('generals.export') }}"><i class="fas fa-file-export"></i></a> --}}
 @endsection
 
 @section('content')
@@ -120,10 +128,10 @@
                             @endforeach
                         </tbody>
                     </table>
-                    <div class="col-xs-12 col-sm-12 col-md-12 mt-3 text-end">
+                    {{-- <div class="col-xs-12 col-sm-12 col-md-12 mt-3 text-end">
                         <a href="{{ url('admin/events') }}"
                             class="btn btn-outline-primary">{{ trans('generals.back') }}</a>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>

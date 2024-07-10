@@ -117,13 +117,12 @@
 
 @section('button')
     <a href="{{ url('admin/events/create') }}" class="btn btn-secondary create-new btn-primary waves-effect waves-light"
-        data-toggle="tooltip" data-placement="bottom"><span><i class="ti ti-plus me-sm-1"></i>
-            <span class="d-none d-sm-inline-block">{{ trans('generals.add') }}</span>
+        data-toggle="tooltip" data-placement="bottom" title="{{ trans('generals.add') }}"><span><i
+                class="ti ti-plus me-sm-1"></i>
         </span></a>
     <a href="{{ url('admin/export/events/exhibitors') }}"
-        class="btn btn-secondary create-new btn-primary waves-effect waves-light" data-toggle="tooltip"
-        data-placement="bottom"><span><i class="ti ti-plus me-sm-1"></i>
-            <span class="d-none d-sm-inline-block">{{ trans('generals.export') }}</span>
+        class="btn btn-secondary create-new btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="bottom"
+        data-placement="bottom" title="{{ trans('generals.export') }}"><span><i class="fas fa-file-export"></i>
         </span></a>
 @endsection
 

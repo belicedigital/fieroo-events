@@ -83,14 +83,22 @@
 @section('path', trans('entities.events'))
 @section('current', trans('entities.order') . ' Stand: ' . $stand_name)
 
-@section('buttons')
-    @if (isset($back_url))
+@section('button')
+    @php
+        $url = isset($back_url) ? $back_url : url('admin/dashboard');
+    @endphp
+    <a href="{{ $url }}" class="btn btn-secondary create-new btn-primary waves-effect waves-light"
+        data-toggle="tooltip" data-placement="bottom" title="{{ trans('generals.back') }}"><span><i
+                class="fas fa-chevron-left"></i>
+        </span></a>
+    {{-- @if (isset($back_url))
+
         <a href="{{ url($back_url) }}" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom"
             title="{{ trans('generals.back') }}"><i class="fas fa-chevron-left"></i></a>
     @else
         <a href="{{ url('admin/dashboard') }}" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom"
             title="{{ trans('generals.back') }}"><i class="fas fa-chevron-left"></i></a>
-    @endif
+    @endif --}}
 @endsection
 
 @section('content')
