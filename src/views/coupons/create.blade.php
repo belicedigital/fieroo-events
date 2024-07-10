@@ -73,7 +73,7 @@
 
 @section('button')
     <a href="{{ url('admin/coupons') }}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="bottom"
-        data-bs-orignal-title="{{ trans('generals.back') }}"><i class="fas fa-chevron-left"></i></a>
+        data-bs-original-title="{{ trans('generals.back') }}"><i class="fas fa-chevron-left"></i></a>
 @endsection
 
 @section('content')
