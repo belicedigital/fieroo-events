@@ -107,7 +107,7 @@
 
 @section('button')
     <a href="{{ url('admin/coupons/create') }}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="bottom"
-        data-bs-original-title="{{ trans('generals.add') }}"><i class="ti ti-plus me-sm-1"></i></a>
+        data-bs-original-title="{{ trans('generals.add') }}"><i class="fas fa-plus"></i></a>
 @endsection
 
 @section('path', trans('entities.coupons'))
