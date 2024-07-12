@@ -599,6 +599,7 @@
                 let price = selected[0].price
                 let size = selected[0].size
                 let description = JSON.parse(selected[0].description)
+                console.log(description)
                 // const desc = deltaToHtml(description);
                 document.getElementById('stand_description').innerHTML = description;
                 $('#price').find('span').text(price)
