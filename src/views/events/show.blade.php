@@ -435,9 +435,9 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/bs-stepper/bs-stepper.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/toastr/toastr.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
-    {{-- <link rel="stylesheet" href="{{ asset('assets/vendor/libs/quill/typography.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/quill/typography.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/quill/katex.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/quill/editor.css') }}" /> --}}
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/quill/editor.css') }}" />
 @endsection
 
 @section('vendor-script')
@@ -446,12 +446,12 @@
     <script src="{{ asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/bs-stepper/bs-stepper.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/toastr/toastr.js') }}"></script>
-    {{-- <script src="{{ asset('assets/vendor/libs/quill/katex.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/quill/quill.js') }}"></script> --}}
+    <script src="{{ asset('assets/vendor/libs/quill/katex.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/quill/quill.js') }}"></script>
 @endsection
 
 @section('page-script')
-    {{-- <script src="{{ asset('assets/js/text-editor.js') }}"></script> --}}
+    <script src="{{ asset('assets/js/text-editor.js') }}"></script>
     <script src="https://js.stripe.com/v3/"></script>
     <script>
         const initStripe = () => {
@@ -580,30 +580,34 @@
             $('#total-tax').find('span').text(totalWithTax.toFixed(2));
             $('#tot-tax').text((totalWithTax - totalWithoutTax).toFixed(2));
         };
+        const isJsonString(str) {
+            try {
+                JSON.parse(str);
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
         $(document).ready(function() {
-            // function deltaToHtml(deltaOps) {
-            //     const container = document.createElement('div');
-            //     const quill = new Quill(container);
-
-            //     // Imposta il contenuto usando il delta
-            //     quill.setContents(deltaOps);
-
-            //     // Restituisce l'HTML
-            //     return container.querySelector('.ql-editor').innerHTML;
-            // }
             //initStripe();
             getStands();
             $('select[name="stand_type"]').on('change', function(e) {
-                console.log('ciao')
                 resetCalcs()
                 let selected = $('select[name="stand_type"]').find(':selected');
                 let price = selected[0].price
                 let size = selected[0].size
-                console.log('addio')
-                let description = JSON.parse(selected[0].description)
-                console.log(description)
+                let desc = isJsonString(selected[0].description)
+                if (desc) {
+                    desc = deltaToHtml(description);
+                } else {
+                    desc = selected[0].description
+                }
+                // if(isJsonString(selected[0].description)) {
+                //     desc = deltaToHtml(description);
+                // }
+                //     let description = JSON.parse(selected[0].description)
                 // const desc = deltaToHtml(description);
-                document.getElementById('stand_description').innerHTML = description;
+                document.getElementById('stand_description').innerHTML = desc;
                 $('#price').find('span').text(price)
                 $('#size').find('span').text(size)
                 $('input[name="stand_selected"]').val($('select[name="stand_type"]').val())
