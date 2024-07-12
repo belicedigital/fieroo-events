@@ -594,10 +594,12 @@
             //initStripe();
             getStands();
             $('select[name="stand_type"]').on('change', function(e) {
+                console.log('ciao')
                 resetCalcs()
                 let selected = $('select[name="stand_type"]').find(':selected');
                 let price = selected[0].price
                 let size = selected[0].size
+                console.log('addio')
                 let description = JSON.parse(selected[0].description)
                 console.log(description)
                 // const desc = deltaToHtml(description);
