@@ -580,7 +580,7 @@
             $('#total-tax').find('span').text(totalWithTax.toFixed(2));
             $('#tot-tax').text((totalWithTax - totalWithoutTax).toFixed(2));
         };
-        const isJsonString(str) {
+        const isJsonString = (str) => {
             try {
                 JSON.parse(str);
                 return true;
