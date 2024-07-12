@@ -435,9 +435,9 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/bs-stepper/bs-stepper.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/toastr/toastr.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/quill/typography.css') }}" />
+    {{-- <link rel="stylesheet" href="{{ asset('assets/vendor/libs/quill/typography.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/quill/katex.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/quill/editor.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/quill/editor.css') }}" /> --}}
 @endsection
 
 @section('vendor-script')
@@ -446,12 +446,12 @@
     <script src="{{ asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/bs-stepper/bs-stepper.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/toastr/toastr.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/quill/katex.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/quill/quill.js') }}"></script>
+    {{-- <script src="{{ asset('assets/vendor/libs/quill/katex.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/quill/quill.js') }}"></script> --}}
 @endsection
 
 @section('page-script')
-    <script src="{{ asset('assets/js/text-editor.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/text-editor.js') }}"></script> --}}
     <script src="https://js.stripe.com/v3/"></script>
     <script>
         const initStripe = () => {
@@ -599,8 +599,8 @@
                 let price = selected[0].price
                 let size = selected[0].size
                 let description = JSON.parse(selected[0].description)
-                const desc = deltaToHtml(description);
-                document.getElementById('stand_description').innerHTML = desc;
+                // const desc = deltaToHtml(description);
+                document.getElementById('stand_description').innerHTML = description;
                 $('#price').find('span').text(price)
                 $('#size').find('span').text(size)
                 $('input[name="stand_selected"]').val($('select[name="stand_type"]').val())
