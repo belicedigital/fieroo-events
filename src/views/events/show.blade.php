@@ -582,7 +582,8 @@
         };
         const isJsonString = (str) => {
             try {
-                JSON.parse(str);
+                let description = JSON.parse(str);
+                deltaToHtml(description);
                 return true;
             } catch (e) {
                 return false;
@@ -596,12 +597,8 @@
                 let selected = $('select[name="stand_type"]').find(':selected');
                 let price = selected[0].price
                 let size = selected[0].size
-                let desc = isJsonString(selected[0].description)
-                if (desc) {
-                    desc = deltaToHtml(description);
-                } else {
-                    desc = selected[0].description
-                }
+                let desc = isJsonString(selected[0].description) ? JSON.parse(selected[0].description) :
+                    selected[0].description
                 // if(isJsonString(selected[0].description)) {
                 //     desc = deltaToHtml(description);
                 // }
