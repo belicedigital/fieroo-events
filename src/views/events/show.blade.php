@@ -582,8 +582,7 @@
         };
         const isJsonString = (str) => {
             try {
-                let description = JSON.parse(str);
-                deltaToHtml(description);
+                JSON.parse(str);
                 return true;
             } catch (e) {
                 return false;
@@ -597,14 +596,18 @@
                 let selected = $('select[name="stand_type"]').find(':selected');
                 let price = selected[0].price
                 let size = selected[0].size
-                let desc = isJsonString(selected[0].description) ? JSON.parse(selected[0].description) :
-                    selected[0].description
+                let desc = isJsonString(selected[0].description)
+                let description = selected[0].description
+                if (desc) {
+                    description = JSON.parse(selected[0].description)
+                    desc = deltaToHtml(description);
+                }
                 // if(isJsonString(selected[0].description)) {
                 //     desc = deltaToHtml(description);
                 // }
                 //     let description = JSON.parse(selected[0].description)
                 // const desc = deltaToHtml(description);
-                document.getElementById('stand_description').innerHTML = desc;
+                document.getElementById('stand_description').innerHTML = description;
                 $('#price').find('span').text(price)
                 $('#size').find('span').text(size)
                 $('input[name="stand_selected"]').val($('select[name="stand_type"]').val())
