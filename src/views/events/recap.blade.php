@@ -96,9 +96,9 @@
         <div class="col-12">
             <div class="callout callout-info mb-3">
                 @php
-                    $amount_no_tax = $amount / (1 + $iva / 100);
-                    $amount_with_tax = $amount;
-                    $tax_amount = $amount_with_tax - $amount_no_tax;
+                    $amount_no_tax = round($amount / (1 + $iva / 100), 2);
+                    $amount_with_tax = round($amount, 2);
+                    $tax_amount = round($amount_with_tax - $amount_no_tax, 2);
                 @endphp
                 <p class="m-0"><strong>{{ trans('generals.stand_price') }}</strong> {{ $amount_no_tax }}
                     €
@@ -106,9 +106,9 @@
                 <p class="m-0"><strong>{{ trans('generals.n_modules') }}</strong> {{ $n_modules }}</p>
                 @if ($extra > 0)
                     @php
-                        $extra_no_tax = $extra / (1 + $iva / 100);
-                        $extra_with_tax = $extra;
-                        $tax_extra = $extra_with_tax - $extra_no_tax;
+                        $extra_no_tax = round($extra / (1 + $iva / 100), 2);
+                        $extra_with_tax = round($extra, 2);
+                        $tax_extra = round($extra_with_tax - $extra_no_tax, 2);
                     @endphp
                     <p class="m-0"><strong>{{ trans('generals.furnishing_not_supplied_price') }}</strong>
                         {{ $extra_no_tax }} €</p>
