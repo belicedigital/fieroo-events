@@ -118,7 +118,7 @@
                                 <div class="form-group mb-3">
                                     <label class="switch switch-primary switch-sm me-0">
                                         <input class='switch-input'type="checkbox" id="is_active" name="is_active"
-                                            {{ $event->is_active ? 'checked' : '' }} data-toggle="toggle"
+                                            {{ $coupon->is_active ? 'checked' : '' }} data-toggle="toggle"
                                             data-on="{{ trans('generals.yes') }}" data-off="{{ trans('generals.no') }}"
                                             data-onstyle="success" data-offstyle="danger" data-size="sm">
                                         <span class="switch-toggle-slider">
