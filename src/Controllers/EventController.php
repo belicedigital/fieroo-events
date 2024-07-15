@@ -277,7 +277,7 @@ class EventController extends Controller
             'n_modules' => $n_modules,
             'amount' => $amount,
             'stand_name' => $stand_trans->name,
-            'back_url' => 'admin/dashboard',
+            'back_url' => url('admin/dashboard'),
             'iva' => $setting->iva
         ]);
     }
