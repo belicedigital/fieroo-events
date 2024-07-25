@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\App;
 use Fieroo\Events\Models\Event;
 use Fieroo\Payment\Models\Payment;
 use Fieroo\Exhibitors\Models\Exhibitor;
+use Fieroo\Exhibitors\Models\StandTypeCategory;
 use Fieroo\Stands\Models\StandsTypeTranslation;
 use Fieroo\Events\Models\EventStand;
 use Fieroo\Furnitures\Models\Furnishing;
@@ -305,6 +306,34 @@ class EventController extends Controller
         return redirect('admin/events')->with('success', trans('forms.deleted_success',['obj' => $entity_name]));
     }
 
+    // public function getStandSelectList($event_id)
+    // {
+    //     $response = [
+    //         'status' => false
+    //     ];
+
+    //     try {
+    //         $event = Event::findOrFail($event_id);
+
+    //         $ids = []
+    //         if(!is_null(auth()->user()->exhibitor->category_id)) {
+    //             $ids = StandTypeCategory::where('category_id', auth()->user()->exhibitor->category_id)->pluck('stand_type_id');
+    //         }
+
+    //         $query = StandsTypeTranslation::where('locale','=',auth()->user()->exhibitor->locale);
+    //         if($event->stands()->count() > 0) {
+    //             $query = $query->whereIn('stand_type_id', $event->stands->pluck('stand_type_id'));
+    //         }
+
+    //         $response['status'] = true;
+    //         $response['data'] = $query->get();
+    //         return response()->json($response);
+    //     } catch(\Exception $e){
+    //         $response['message'] = $e->getMessage();
+    //         return response()->json($response);
+    //     }
+    // }
+
     public function getStandSelectList($event_id)
     {
         $response = [
@@ -314,18 +343,42 @@ class EventController extends Controller
         try {
             $event = Event::findOrFail($event_id);
 
-            $query = StandsTypeTranslation::where('locale','=',auth()->user()->exhibitor->locale);
-            if($event->stands()->count() > 0) {
-                $query = $query->whereIn('stand_type_id', $event->stands->pluck('stand_type_id'));
+            // Recupera gli stand_type_id degli stand correlati all'evento
+            $eventStandTypeIds = $event->stands->pluck('stand_type_id')->toArray();
+
+            // Recupera il category_id dell'utente loggato
+            $category_id = auth()->user()->exhibitor->category_id;
+
+            // Filtra gli stand_type_id in base al category_id dell'utente loggato
+            if (!is_null($category_id)) {
+                $standTypeIds = StandTypeCategory::where('category_id', $category_id)
+                    ->pluck('stand_type_id')
+                    ->toArray();
+
+                // Filtra gli stand_type_id che fanno parte degli stand correlati all'evento
+                $filteredStandTypeIds = array_intersect($standTypeIds, $eventStandTypeIds);
+            } else {
+                // Se il category_id è nullo, considera tutti gli stand_type_id dell'evento
+                $filteredStandTypeIds = $eventStandTypeIds;
             }
+
+            // Crea la query per recuperare gli stand del locale dell'utente loggato
+            $query = StandsTypeTranslation::where('locale', auth()->user()->exhibitor->locale);
+            if (!empty($filteredStandTypeIds)) {
+                $query = $query->whereIn('stand_type_id', $filteredStandTypeIds);
+            }
+
+            // Esegui la query e restituisci il risultato
             $response['status'] = true;
             $response['data'] = $query->get();
             return response()->json($response);
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
+            // Gestisci le eccezioni
             $response['message'] = $e->getMessage();
             return response()->json($response);
         }
     }
+
 
     public function exportEventsExhibitors()
     {
