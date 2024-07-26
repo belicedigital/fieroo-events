@@ -98,6 +98,7 @@
             common_request.post('/admin/furnishings/stands')
                 .then(response => {
                     let data = response.data
+                    console.log(data)
                     if (data.status) {
                         $.each(data.data, function(index, value) {
                             let opt = document.createElement('option')
