@@ -132,7 +132,8 @@ class EventController extends Controller
     public function edit($id)
     {
         $event = Event::findOrFail($id);
-        return view('events::edit', ['event' => $event]);
+        $selected_stands_ids = $event->stands()->pluck('stand_type_id');
+        return view('events::edit', ['event' => $event, 'selected_stands_ids' => $selected_stands_ids]);
     }
 
     /**
@@ -168,6 +169,28 @@ class EventController extends Controller
             $event->subscription_date_open_until = Carbon::parse($request->subscription_date_open_until)->format('Y-m-d');
             $event->is_published = $request->is_published ? true : false;
             $event->save();
+
+            $old_event_stands = $event->stands()->pluck('stand_type_id')->toArray();
+
+            if(!is_null($request->stand_type_id)) {
+                // insert the new ones that are not in the old array
+                foreach($request->stand_type_id as $index => $stand_type_id) {
+                    if(!in_array($stand_type_id, $old_event_stands)) {
+                        $event->stands()->create([
+                            'stand_type_id' => $stand_type_id,
+                        ]);
+                    }
+                }
+
+                // delete the old ones that are not in the new array
+                foreach($old_event_stands as $index => $stand_type_id) {
+                    if(!in_array($stand_type_id, $request->stand_type_id)) {
+                        $event->stands()->where('stand_type_id', $stand_type_id)->delete();
+                    }
+                }
+            } else {
+                $event->stands()->delete();
+            }
 
             $entity_name = trans('entities.event');
             return redirect('admin/events')->with('success', trans('forms.updated_success',['obj' => $entity_name]));
