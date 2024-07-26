@@ -19,7 +19,8 @@
                     <form action="{{ route('events.update', $event->id) }}" method="POST">
                         @METHOD('PATCH')
                         @csrf
-                        <input type="hidden" name="selected_stands_ids" value="{{ $selected_stands_ids }}">
+                        <input type="hidden" id="selected_stands_ids" name="selected_stands_ids"
+                            value="{{ $selected_stands_ids }}">
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <div class="form-group mb-3">
@@ -98,7 +99,6 @@
             common_request.post('/admin/furnishings/stands')
                 .then(response => {
                     let data = response.data
-                    console.log(data)
                     if (data.status) {
                         $.each(data.data, function(index, value) {
                             let opt = document.createElement('option')
