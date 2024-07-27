@@ -380,8 +380,6 @@ class EventController extends Controller
 
                 // Filtra gli stand_type_id che fanno parte degli stand correlati all'evento
                 $filteredStandTypeIds = array_intersect($standTypeIds, $eventStandTypeIds);
-
-                dd($filteredStandTypeIds);
             } else {
                 // Se il category_id è nullo, considera tutti gli stand_type_id dell'evento
                 $filteredStandTypeIds = $eventStandTypeIds;
@@ -397,6 +395,9 @@ class EventController extends Controller
             $query = StandsTypeTranslation::where('locale', auth()->user()->exhibitor->locale);
             if (!empty($filteredStandTypeIds)) {
                 $query = $query->whereIn('stand_type_id', $filteredStandTypeIds);
+            } else {
+                // Se è vuoto, forza la query a non restituire nessun risultato
+                $query = $query->whereRaw('0 = 1'); // Questa condizione è sempre falsa
             }
 
             // Esegui la query e restituisci il risultato
