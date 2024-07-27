@@ -368,7 +368,6 @@ class EventController extends Controller
 
             // Recupera gli stand_type_id degli stand correlati all'evento
             $eventStandTypeIds = $event->stands->pluck('stand_type_id')->toArray();
-            dd($eventStandTypeIds);
 
             // Recupera il category_id dell'utente loggato
             $category_id = auth()->user()->exhibitor->category_id;
@@ -381,6 +380,8 @@ class EventController extends Controller
 
                 // Filtra gli stand_type_id che fanno parte degli stand correlati all'evento
                 $filteredStandTypeIds = array_intersect($standTypeIds, $eventStandTypeIds);
+
+                dd($filteredStandTypeIds);
             } else {
                 // Se il category_id è nullo, considera tutti gli stand_type_id dell'evento
                 $filteredStandTypeIds = $eventStandTypeIds;
