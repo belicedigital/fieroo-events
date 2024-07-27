@@ -86,6 +86,7 @@
                 <div class="card-body">
                     <form action="{{ route('coupons.update', $coupon->id) }}" method="POST">
                         @METHOD('PATCH')
+                        @csrf
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <div class="form-group mb-3">
