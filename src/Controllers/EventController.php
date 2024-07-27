@@ -371,6 +371,7 @@ class EventController extends Controller
 
             // Recupera il category_id dell'utente loggato
             $category_id = auth()->user()->exhibitor->category_id;
+            dd($category_id);
 
             // Filtra gli stand_type_id in base al category_id dell'utente loggato
             if (!is_null($category_id)) {
