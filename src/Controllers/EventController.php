@@ -301,7 +301,7 @@ class EventController extends Controller
             'n_modules' => $n_modules,
             'amount' => $amount,
             'stand_name' => $stand_trans->name,
-            'back_url' => url('admin/dashboard'),
+            'back_url' => url('admin/events/'.$event_id.'/exhibitors'),
             'iva' => $setting->iva
         ]);
     }
