@@ -206,10 +206,9 @@
             e.preventDefault();
             Swal.fire({
                 title: "{!! trans('generals.confirm_remove') !!}",
-                // showCancelButton: false,
-                // showDenyButton: false,
+                showCancelButton: true,
                 confirmButtonText: "{{ trans('generals.confirm') }}",
-                // cancelButtonText: "{{ trans('generals.cancel') }}",
+                cancelButtonText: "{{ trans('generals.cancel') }}",
             }).then((result) => {
                 if (result.isConfirmed) {
                     $this.closest('form').submit();
