@@ -206,7 +206,7 @@
             e.preventDefault();
             Swal.fire({
                 title: "{!! trans('generals.confirm_remove') !!}",
-                // showCancelButton: false,
+                showCancelButton: false,
                 showDenyButton: false,
                 confirmButtonText: "{{ trans('generals.confirm') }}",
                 cancelButtonText: "{{ trans('generals.cancel') }}",
