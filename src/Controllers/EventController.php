@@ -384,11 +384,11 @@ class EventController extends Controller
                 // Se il category_id è nullo, considera tutti gli stand_type_id dell'evento
                 $filteredStandTypeIds = $eventStandTypeIds;
 
-                // Recupera tutti gli stand_type_id associati a qualsiasi category_id
-                $standTypeIdsToExclude = StandTypeCategory::distinct()->pluck('stand_type_id')->toArray();
+                // // Recupera tutti gli stand_type_id associati a qualsiasi category_id
+                // $standTypeIdsToExclude = StandTypeCategory::distinct()->pluck('stand_type_id')->toArray();
 
-                // Escludi gli stand_type_id che hanno una relazione con qualsiasi category_id
-                $filteredStandTypeIds = array_diff($filteredStandTypeIds, $standTypeIdsToExclude);
+                // // Escludi gli stand_type_id che hanno una relazione con qualsiasi category_id
+                // $filteredStandTypeIds = array_diff($filteredStandTypeIds, $standTypeIdsToExclude);
             }
 
             // Crea la query per recuperare gli stand del locale dell'utente loggato
