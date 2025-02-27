@@ -389,6 +389,7 @@ class EventController extends Controller
 
                 // // Escludi gli stand_type_id che hanno una relazione con qualsiasi category_id
                 // $filteredStandTypeIds = array_diff($filteredStandTypeIds, $standTypeIdsToExclude);
+                
             }
 
             // Crea la query per recuperare gli stand del locale dell'utente loggato
